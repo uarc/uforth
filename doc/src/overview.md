@@ -1,1 +1,3 @@
 # Overview
+
+UFORTH is a Subroutine Threaded Code (STC) FORTH OS for the u0-x processor. It does not follow the spec of ANSI FORTH, but tries to remain familiar to a FORTH user. The reason for many changes is that, as a stack architecture, u0-x can execute all of the common FORTH words in one instruction, but to gain access to this one-instruction computation, one would either need to run an optimization pass to find optimizations, or run special words to take advantage of the architecture. Also, supporting any other sort of FORTH other than STC would completely destroy the benefits of the stack architecture, so it is necessary to allow FORTH words to be compiled directly down into machine code.
