@@ -128,6 +128,9 @@ Word patterns are enclosed in single quotes (') and are represented using a rege
 - Unlike other FORTHs, this doesn't provide the data space pointer, and simply calls `POSTPONE` on everything until `;`.
   - If the pointer is needed, it should be provided by adding it into the data space of the executing word.
 
+### DROP
+- dstack: `( w -- )`
+
 ### ELSE
 - The alternate case of an `IF` statement.
 
