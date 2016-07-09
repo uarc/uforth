@@ -102,6 +102,12 @@ Word patterns are enclosed in single quotes (') and are represented using a rege
 ### ]
 - Enter into run mode.
 
+### 2*
+- dstack: `( w -- w*2 )`
+
+### 2/
+- dstack: `( w -- w/2 )`
+
 ### ABORT"
 - pattern: `'^ ([^ ]*)"'`
 - Compiles the specified message into the current word and prints it along with executing `QUIT`.
