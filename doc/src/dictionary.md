@@ -13,6 +13,9 @@ Word patterns are enclosed in single quotes (') and are represented using a rege
 - Writes `w` to the variable token specified in the pattern.
 - Can be used to set the body address for many words, but not all.
 
+### &
+- dstack: `( a b -- a&b )`
+
 ### '
 - dstack: `( -- xt )`
 - pattern: `'^ ([^ ]*)(?: |$)'`
@@ -102,6 +105,15 @@ Word patterns are enclosed in single quotes (') and are represented using a rege
 ### ]
 - Enter into run mode.
 
+### ^
+- dstack: `( a b -- a^b )`
+
+### |
+- dstack: `( a b -- a|b )`
+
+### ~
+- dstack: `( a -- ~a )`
+
 ### 2*
 - dstack: `( w -- w*2 )`
 
@@ -111,6 +123,10 @@ Word patterns are enclosed in single quotes (') and are represented using a rege
 ### ABORT"
 - pattern: `'^ ([^ ]*)"'`
 - Compiles the specified message into the current word and prints it along with executing `QUIT`.
+
+### ABS
+- dstack: `( w -- u )`
+- Finds the absolute value of w.
 
 ### ALLOT
 - dstack: `( w -- )`
