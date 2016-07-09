@@ -369,6 +369,14 @@ Word patterns are enclosed in single quotes (') and are represented using a rege
 - This is called at the beginning of the program and when any fault occurs.
 - This resets everything in the processor and returns control to the shell.
 
+### R<
+- dstack: `( w -- )`
+- Places `w` on the r-stack.
+
+### R>
+- dstack: `( -- w )`
+- Takes `w` from the r-stack.
+
 ### REVEAL
 - Reveals and finishes the most recent word, also performing tail-call optimization on it.
 
