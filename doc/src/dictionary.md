@@ -75,6 +75,10 @@ Word patterns are enclosed in single quotes (') and are represented using a rege
 - dstack: `( ins -- )`
 - Updates the various tail words to indicate the new tail call instruction to be optimized if `;` is encountered.
 
+### COMPILE,
+- dstack: `( xt -- )`
+- Adds a call to the execution token `xt` directly into the current word.
+
 ### CONTINUE
 - Continues a loop on the next iteration from the beginning.
 
@@ -144,12 +148,32 @@ Word patterns are enclosed in single quotes (') and are represented using a rege
 - dstack: `( -- hereb )`
 - Gets the address of the dictionary head/beginning (the xt of the most recent word).
 
+### I
+- dstack: `( -- i )`
+- Gets inner loop iterator.
+
 ### INTERPRET
 - Interprets whatever is at the TIB, processing each word using `shell_xt` until all words are consumed.
+
+### J
+- dstack: `( -- j )`
+- Gets second most inner loop iterator.
+
+### K
+- dstack: `( -- k )`
+- Gets third most inner loop iterator.
 
 ### KEY
 - dstack: `( -- c )`
 - Retrieves a key from the input device.
+
+### L
+- dstack: `( -- l )`
+- Gets fourth most inner loop iterator.
+
+### LITERAL
+- dstack: `( -- w )`
+- Compile-time dstack: `( w -- )`
 
 ### LOAD
 - dstack: `( -- w )`
