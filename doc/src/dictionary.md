@@ -34,6 +34,9 @@ Word patterns are enclosed in single quotes (') and are represented using a rege
 - dstack: `( a -- a+b )`
 - Attempt to parse a number `b` using `NUMBER` and create an immediate add using it.
 
+### +1
+- dstack: `( a -- a+1 )`
+
 ### ,
 - dstack: `( w -- )`
 - Writes a single processor word to the data space of the most recently created word.
@@ -45,6 +48,9 @@ Word patterns are enclosed in single quotes (') and are represented using a rege
 - dstack: `( a -- a-b )`
 - Attempt to parse a number `b` using `NUMBER` and create an immediate subtract using it.
 
+### -1
+- dstack: `( a -- a-1 )`
+
 ### .
 - dstack: `( w -- )`
 - Print a signed number `w` using the base specified in `BASE`.
@@ -55,6 +61,15 @@ Word patterns are enclosed in single quotes (') and are represented using a rege
 
 ### :
 - pattern: `'^ ([^ ]*)(?: |$)'`
+- Updates `hered_start` with the current `hered`.
+- Creates a new unfinished word entry in the dictionary with the name matched by the capture group in the pattern.
+- Enters compilation mode.
+- Resets tail call variables.
+
+### :NONAME
+- dstack: `( -- xt )`
+- Makes a new anonymous word.
+- Places the execution token of this anonymous word on the stack.
 - Updates `hered_start` with the current `hered`.
 - Creates a new unfinished word entry in the dictionary with the name matched by the capture group in the pattern.
 - Enters compilation mode.
