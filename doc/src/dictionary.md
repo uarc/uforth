@@ -103,9 +103,13 @@ Word patterns are enclosed in single quotes (') and are represented using a rege
 
 ### FOR
 - dstack: `( w -- )`
+- Compile-time dstack: `( -- addr )`
+  - Pushes the address where the address of the last instruction needs to be added.
 - Takes a number of times to iterate and iterates that many times.
 
 ### FOREVER
+- Compile-time dstack: `( -- addr )`
+  - Pushes the address where the address of the last instruction needs to be added.
 - Begins a loop which loops forever.
 
 ### FORGET
@@ -157,6 +161,8 @@ Word patterns are enclosed in single quotes (') and are represented using a rege
 - This is compiled to any word which uses its data space immediately when it is required (many words may not).
 
 ### LOOP
+- Compile-time dstack: `( addr -- )`
+  - Places the address of the instruction before this at the address `addr`.
 - Ends a loop definition.
 
 ### NUMBER
