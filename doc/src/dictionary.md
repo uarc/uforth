@@ -102,6 +102,9 @@ Word patterns are enclosed in single quotes (') and are represented using a rege
 - Unlike other FORTHs, this doesn't provide the data space pointer, and simply calls `POSTPONE` on everything until `;`.
   - If the pointer is needed, it should be provided by adding it into the data space of the executing word.
 
+### ELSE
+- The alternate case of an `IF` statement.
+
 ### EXIT
 - Returns from the current word.
 
@@ -151,6 +154,60 @@ Word patterns are enclosed in single quotes (') and are represented using a rege
 ### I
 - dstack: `( -- i )`
 - Gets inner loop iterator.
+
+### IF=
+- dstack: `( a b -- )`
+- Goes to `ELSE` or `THEN` if there is none if the condition is not met.
+
+### IF!=
+- dstack: `( a b -- )`
+- Goes to `ELSE` or `THEN` if there is none if the condition is not met.
+
+### IF<
+- dstack: `( a b -- )`
+- Goes to `ELSE` or `THEN` if there is none if the condition is not met.
+
+### IF<=
+- dstack: `( a b -- )`
+- Goes to `ELSE` or `THEN` if there is none if the condition is not met.
+
+### IF<U
+- dstack: `( a b -- )`
+- Goes to `ELSE` or `THEN` if there is none if the condition is not met.
+
+### IF<=U
+- dstack: `( a b -- )`
+- Goes to `ELSE` or `THEN` if there is none if the condition is not met.
+
+### IFC
+- dstack: `( a b -- )`
+- Goes to `ELSE` or `THEN` if there is none if the condition is not met.
+- Checks for carry bit status.
+
+### IFC!
+- dstack: `( a b -- )`
+- Goes to `ELSE` or `THEN` if there is none if the condition is not met.
+- Checks for carry bit status.
+
+### IFO
+- dstack: `( a b -- )`
+- Goes to `ELSE` or `THEN` if there is none if the condition is not met.
+- Checks for overflow bit status.
+
+### IFO!
+- dstack: `( a b -- )`
+- Goes to `ELSE` or `THEN` if there is none if the condition is not met.
+- Checks for overflow bit status.
+
+### IFI
+- dstack: `( a b -- )`
+- Goes to `ELSE` or `THEN` if there is none if the condition is not met.
+- Checks for interrupt bit status, which clears it if it was set.
+
+### IFI!
+- dstack: `( a b -- )`
+- Goes to `ELSE` or `THEN` if there is none if the condition is not met.
+- Checks for interrupt bit status, which clears it if it was set.
 
 ### INTERPRET
 - Interprets whatever is at the TIB, processing each word using `shell_xt` until all words are consumed.
@@ -232,6 +289,9 @@ Word patterns are enclosed in single quotes (') and are represented using a rege
 
 ### tail_ins
 - Contains the instruction (properly shifted to the correct processor word position) to replace at the tail address.
+
+### THEN
+- The end of an `IF` statement.
 
 ### TIB@
 - dstack: `( -- tib )`
