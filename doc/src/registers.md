@@ -1,0 +1,3 @@
+# Registers
+
+u0 has 4 data counters. Since they cannot be used directly in FORTH, it would be ideal to use them for purposes of compiling and interpreting. DC0 is used by several of the words used by the user and kernel. DC1-3, on the other hand, are not used. DC1 is to be mapped to a pre-decrement stack for compilation of loops, if statements, and the like. It could also be used in programs as the return stack, though because of hardware loops and other improvements this is not necessary on u0. DC2 is to be mapped to the input processing position (PP) of the TIB. DC3 is to be mapped to HERED, the top of the data-space stack which grows upwards.
