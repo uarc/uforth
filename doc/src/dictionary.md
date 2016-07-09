@@ -108,6 +108,10 @@ Word patterns are enclosed in single quotes (') and are represented using a rege
 ### CONTINUE
 - Continues a loop on the next iteration from the beginning.
 
+### COPY:
+- dstack: `( w .. - w .. w )`
+- Aquires the next number using `NUMBER` and compiles an immediate stack copy to the top from a specific depth.
+
 ### CREATE
 - pattern: `'^ ([^ ]*)(?: |$)'`
 - Creates a new word entry with the name given by the pattern.
@@ -310,6 +314,10 @@ Word patterns are enclosed in single quotes (') and are represented using a rege
 
 ### REVEAL
 - Reveals and finishes the most recent word, also performing tail-call optimization on it.
+
+### ROT:
+- dstack: `( w .. - .. w )`
+- Aquires the next number using `NUMBER` and compiles an immediate stack rotate to the top from a specific depth.
 
 ### SCAN
 - dstack: `( c -- addr )`
