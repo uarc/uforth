@@ -18,6 +18,10 @@ Word patterns are enclosed in single quotes (') and are represented using a rege
 - pattern: `'^ ([^ ]*)(?: |$)'`
 - Places the execution token of the word found on the stack or calls `ABORT"`.
 
+### (
+- pattern: `'^ ([^ ]*)\)'`
+- Ignores everything up until the next ')'.
+
 ### (compile)
 - pattern: `'^ ([^ ]*)(?: |$)'`
 - Consumes a word and compiles it into the current definition.
@@ -90,6 +94,10 @@ Word patterns are enclosed in single quotes (') and are represented using a rege
 
 ### [
 - Enter into compilation mode.
+
+### \
+- pattern: `'^ ([^ ]*)$'`
+- Ignores everything else on the line.
 
 ### ]
 - Enter into run mode.
