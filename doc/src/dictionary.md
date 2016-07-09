@@ -135,8 +135,16 @@ Word patterns are enclosed in single quotes (') and are represented using a rege
 ### base
 - Contains the base that numbers should be interpreted with using `NUMBER`.
 
+### BL
+- dstack: `( -- ' ' )`
+- Adds the character for space/blank to the stack.
+
 ### BREAK
 - Breaks out of a loop.
+
+### BS
+- dstack: `( -- '\b' )`
+- Adds the character for backspace to the stack.
 
 ### CALL
 - dstack: `( pa -- )`
@@ -251,20 +259,20 @@ Word patterns are enclosed in single quotes (') and are represented using a rege
 - dstack: `( a b -- )`
 - Goes to `ELSE` or `THEN` if there is none if the condition is not met.
 
-### IF<
+### IF>
 - dstack: `( a b -- )`
 - Goes to `ELSE` or `THEN` if there is none if the condition is not met.
 
-### IF<=
+### IF>=
 - dstack: `( a b -- )`
 - Goes to `ELSE` or `THEN` if there is none if the condition is not met.
 
-### IF<U
+### IF>U
 - dstack: `( a b -- )`
 - Goes to `ELSE` or `THEN` if there is none if the condition is not met.
 - Performs an unsigned comparison.
 
-### IF<=U
+### IF>=U
 - dstack: `( a b -- )`
 - Goes to `ELSE` or `THEN` if there is none if the condition is not met.
 - Performs an unsigned comparison.
@@ -335,6 +343,10 @@ Word patterns are enclosed in single quotes (') and are represented using a rege
 - Compile-time dstack: `( addr -- )`
   - Places the address of the instruction before this at the address `addr`.
 - Ends a loop definition.
+
+### NL
+- dstack: `( -- '\n' )`
+- Adds the character for newline to the stack.
 
 ### NUMBER
 - dstack: `( -- w )`
