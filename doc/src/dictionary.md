@@ -16,7 +16,7 @@ Word patterns are enclosed in single quotes (') and are represented using a rege
 ### '
 - dstack: `( -- xt )`
 - pattern: `'^ ([^ ]*)(?: |$)'`
-- Places the execution token of the word found.
+- Places the execution token of the word found on the stack or calls `ABORT"`.
 
 ### (compile)
 - pattern: `'^ ([^ ]*)(?: |$)'`
@@ -27,9 +27,15 @@ Word patterns are enclosed in single quotes (') and are represented using a rege
 - pattern: `'^ ([^ ]*)(?: |$)'`
 - Consumes a word and immediately executes it.
 
+### +
+- dstack: `( a b -- a+b )`
+
 ### ,
 - dstack: `( w -- )`
 - Writes a single processor word to the data space of the most recently created word.
+
+### -
+- dstack: `( a b -- a-b )`
 
 ### :
 - pattern: `'^ ([^ ]*)(?: |$)'`
@@ -56,6 +62,10 @@ Word patterns are enclosed in single quotes (') and are represented using a rege
 
 ### ]
 - Enter into run mode.
+
+### ABORT"
+- pattern: `'^ ([^ ]*)"'`
+- Compiles the specified message into the current word and prints it along with executing `QUIT`.
 
 ### ALLOT
 - dstack: `( w -- )`
@@ -122,6 +132,11 @@ Word patterns are enclosed in single quotes (') and are represented using a rege
 ### FORGET
 - pattern: `'^ ([^ ]*)(?: |$)'`
 - Forgets everything after and including the specified word.
+
+### GETCDS
+- dstack: `( -- addr )`
+- Get the address of the current data space location.
+- This is compiled immediately into the definition and therefore does not affect the address.
 
 ### HERED!
 - dstack: `( hered -- )`
@@ -296,6 +311,10 @@ Word patterns are enclosed in single quotes (') and are represented using a rege
 ### TIB@
 - dstack: `( -- tib )`
 - Adds the address of the terminal input buffer to the stack.
+
+### TYPE
+- dstack: `( str -- )`
+- Takes a string address from the stack and sends it to the terminal device.
 
 ### UNDO
 - Removes the most recent word from the dictionary.
