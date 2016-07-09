@@ -30,12 +30,28 @@ Word patterns are enclosed in single quotes (') and are represented using a rege
 ### +
 - dstack: `( a b -- a+b )`
 
+### +:
+- dstack: `( a -- a+b )`
+- Attempt to parse a number `b` using `NUMBER` and create an immediate add using it.
+
 ### ,
 - dstack: `( w -- )`
 - Writes a single processor word to the data space of the most recently created word.
 
 ### -
 - dstack: `( a b -- a-b )`
+
+### -:
+- dstack: `( a -- a-b )`
+- Attempt to parse a number `b` using `NUMBER` and create an immediate subtract using it.
+
+### .
+- dstack: `( w -- )`
+- Print a signed number `w` using the base specified in `BASE`.
+
+### .U
+- dstack: `( w -- )`
+- Print an unsigned number `w` using the base specified in `BASE`.
 
 ### :
 - pattern: `'^ ([^ ]*)(?: |$)'`
@@ -115,6 +131,11 @@ Word patterns are enclosed in single quotes (') and are represented using a rege
 ### ELSE
 - The alternate case of an `IF` statement.
 
+### EMIT
+- dstack: `( c -- )`
+- Print the character c on the terminal.
+  - This can control the terminal using the backspace and newline characters.
+
 ### EXIT
 - Returns from the current word.
 
@@ -189,10 +210,12 @@ Word patterns are enclosed in single quotes (') and are represented using a rege
 ### IF<U
 - dstack: `( a b -- )`
 - Goes to `ELSE` or `THEN` if there is none if the condition is not met.
+- Performs an unsigned comparison.
 
 ### IF<=U
 - dstack: `( a b -- )`
 - Goes to `ELSE` or `THEN` if there is none if the condition is not met.
+- Performs an unsigned comparison.
 
 ### IFC
 - dstack: `( a b -- )`
