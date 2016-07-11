@@ -96,14 +96,14 @@ Word patterns are enclosed in single quotes (') and are represented using a rege
 - Can also be used to find the address of the body of many tokens.
 
 ### [
-- Enter into compilation mode.
+- Enter into run mode.
 
 ### \
 - pattern: `'^ ([^ ]*)$'`
 - Ignores everything else on the line.
 
 ### ]
-- Enter into run mode.
+- Enter into compilation mode.
 
 ### ^
 - dstack: `( a b -- a^b )`
