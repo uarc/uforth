@@ -62,12 +62,16 @@ Word patterns are enclosed in single quotes (') and are represented using a rege
 - dstack: `( w -- )`
 - Print a signed number `w` using the base specified in `BASE`.
 
+### ."
+- Compile-time pattern: `'^ ([^ ]*)"'`
+- Prints out the string pattern.
+
 ### .U
 - dstack: `( w -- )`
 - Print an unsigned number `w` using the base specified in `BASE`.
 
 ### :
-- pattern: `'^ ([^ ]*)(?: |$)'`
+- Compile-time pattern: `'^ ([^ ]*)(?: |$)'`
 - Updates `hered_start` with the current `hered`.
 - Creates a new unfinished word entry in the dictionary with the name matched by the capture group in the pattern.
 - Enters compilation mode.
@@ -91,7 +95,7 @@ Word patterns are enclosed in single quotes (') and are represented using a rege
 
 ### @:
 - dstack: `( -- w )`
-- pattern: `'^ ([^ ]*)(?: |$)'`
+- Compile-time pattern: `'^ ([^ ]*)(?: |$)'`
 - Reads `w` from the variable token specified in the pattern.
 - Can also be used to find the address of the body of many tokens.
 
@@ -166,12 +170,12 @@ Word patterns are enclosed in single quotes (') and are represented using a rege
 - Aquires the next number using `NUMBER` and compiles an immediate stack copy to the top from a specific depth.
 
 ### CREATE
-- pattern: `'^ ([^ ]*)(?: |$)'`
+- Compile-time pattern: `'^ ([^ ]*)(?: |$)'`
 - Creates a new word entry with the name given by the pattern.
 - Resets tail call variables.
 
 ### CREATE_RAW
-- pattern: `'^ ([^ ]*)(?: |$)'`
+- Compile-time pattern: `'^ ([^ ]*)(?: |$)'`
 - Creates a new word entry with the name given by the pattern.
 - Does not add `LOADDS` automatically, so this can be used for optimization.
 - Resets tail call variables.
@@ -353,7 +357,7 @@ Word patterns are enclosed in single quotes (') and are represented using a rege
 - Reads a number from the `PP` with the proper base from `base`.
 
 ### POSTPONE
-- pattern: `'^ ([^ ]*)(?: |$)'`
+- Compile-time pattern: `'^ ([^ ]*)(?: |$)'`
 - Finds a word and compiles in the ability for the current word to add that word to the definition of another word appropriately when it is ran.
 - This is called repeatedly on all words after a `DOES>` up until the `;`, thus it provides the same behavior.
 
@@ -384,6 +388,11 @@ Word patterns are enclosed in single quotes (') and are represented using a rege
 - dstack: `( w .. - .. w )`
 - Aquires the next number using `NUMBER` and compiles an immediate stack rotate to the top from a specific depth.
 
+### S"
+- dstack: `( -- str )`
+- Compile-time pattern: `'^ ([^ ]*)"'`
+- Puts the string specified at compile-time onto the stack.
+
 ### SCAN
 - dstack: `( c -- addr )`
 - Scans from `PP` out until the character `c` is found, then returning the address of c.
@@ -396,6 +405,9 @@ Word patterns are enclosed in single quotes (') and are represented using a rege
 
 ### shell_xt
 - Contains the xt which is used by `INTERPRET` for determining what to do with words.
+
+### STATE
+- Sets the carry bit to `1` if the compiler is in compilation state. Any user-defined states will appear as `0`.
 
 ### tail_paddr
 - Contains the program address off the tail call.
@@ -413,7 +425,8 @@ Word patterns are enclosed in single quotes (') and are represented using a rege
 
 ### TYPE
 - dstack: `( str -- )`
-- Takes a string address from the stack and sends it to the terminal device.
+- Takes a string address from the stack and sends/prints it to the terminal device.
+  - Control characters may interface with the terminal.
 
 ### UNDO
 - Removes the most recent word from the dictionary.
@@ -421,7 +434,7 @@ Word patterns are enclosed in single quotes (') and are represented using a rege
 
 ### WORD
 - dstack: `( c -- str )`
-- pattern: `'^ ([^ ]*)(?: |$)'`
+- Compile-time pattern: `'^ ([^ ]*)(?: |$)'`
 - Takes a character delimiter and places a string at hered from the input, then returns the address of the string.
 
 ### XT>DATA@
