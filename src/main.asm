@@ -1,5 +1,13 @@
+#####
+##### Init
+#####
+
 :INIT
-jmpi:QUIT
+jenteri:QUIT
+
+#####
+##### Dictionary
+#####
 
 :(run)_NAME
 i:5
@@ -11,17 +19,20 @@ i:4
 i:"base
 :base
 $base_DSP read0 write3
-0x30 jumpi:DEFER
+0x30 jenteri:DEFER
 
 :DEFER_NAME
 i:5
 i:"DEFER
 :DEFER
 
+
 :HEREP!_NAME
 i:6
 i:"HEREP!
 :HEREP!
+# Check if we are in run mode or compile mode.
+
 
 :HEREP@_NAME
 i:6
@@ -49,24 +60,28 @@ i:4
 i:"QUIT
 :QUIT
 ld0i
-# Reset the processor, immediately moving to the location after this.
+# Reset the processor.
 $QUIT+ .QUIT+ read0 read0 reset
-:QUIT+
 # Perform an infinite loop of INTERPRET
 :QUIT-
-enteri:INTERPRET
-jmpi:QUIT-
+ld0i enteri:INTERPRET
+:QUIT+
+jenteri:QUIT-
 
 :shell_xt_NAME
 i:8
 i:"shell_xt
 :shell_xt
 
-:shell_xt_XT
-.shell_xt $shell_xt $shell_xt_NAME i:0b1
+#####
+##### Backstack
+#####
 
-:CONTINUE_XT
-.CONTINUE $CONTINUE $CONTINUE_NAME i:0b0
+:shell_xt_XT
+.shell_xt $(run)_XT $shell_xt_NAME i:0b1
+
+:INTERPRET_XT
+.INTERPRET $INTERPRET $INTERPRET_NAME i:0b0
 
 :base_XT
 .base :base_DSP fill:10,1 $base_NAME i:0b1
