@@ -52,7 +52,10 @@ ld0i
 # Reset the processor, immediately moving to the location after this.
 $QUIT+ .QUIT+ read0 read0 reset
 :QUIT+
-jenteri:INTERPRET
+# Perform an infinite loop of INTERPRET
+:QUIT-
+enteri:INTERPRET
+jmpi:QUIT-
 
 :shell_xt_NAME
 i:8
