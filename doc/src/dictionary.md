@@ -2,92 +2,81 @@
 
 Word patterns are enclosed in single quotes (') and are represented using a regex. Non-capitalized words are variables. Constants are still capitalized.
 
-### !
+### `!`
 - dstack: `( w addr -- )`
-- pattern: `'^ ([^ ]*)(?: |$)'`
 - Writes `w` to the address `addr`.
 
-### !:
-- dstack: `( w -- )`
-- pattern: `'^ ([^ ]*)(?: |$)'`
-- Writes `w` to the variable token specified in the pattern.
-- Can be used to set the body address for many words, but not all.
-
-### &
-- dstack: `( a b -- a&b )`
-
-### '
+### `'`
 - dstack: `( -- xt )`
 - pattern: `'^ ([^ ]*)(?: |$)'`
-- Places the execution token of the word found on the stack or calls `ABORT"`.
+- Places the execution token of the word found on the stack.
 
-### (
-- pattern: `'^ ([^ ]*)\)'`
-- Ignores everything up until the next ')'.
-
-### (compile)
+### `(compile)`
 - pattern: `'^ ([^ ]*)(?: |$)'`
 - Consumes a word and compiles it into the current definition.
 - Skips the word currently being written when searching for words so the word can reference previous definitions.
 
-### (run)
+### `(run)`
 - pattern: `'^ ([^ ]*)(?: |$)'`
 - Consumes a word and immediately executes it.
 
-### +
+### `*`
+- dstack: `( a b -- a*b )`
+
+### `*/`
+- dstack: `( a b c -- a*b/c )`
+
+### `*/MOD`
+- dstack: `( a b c -- a*b%c a*b/c )`
+
+### `+`
 - dstack: `( a b -- a+b )`
 
-### +:
-- dstack: `( a -- a+b )`
-- Attempt to parse a number `b` using `NUMBER` and create an immediate add using it.
+### `+!`
+- dstack: `( a addr -- )`
+- Adds `a` to word at address `addr`.
 
-### +1
-- dstack: `( a -- a+1 )`
-
-### ,
+### `,`
 - dstack: `( w -- )`
-- Writes a single processor word to the data space of the most recently created word.
+- Writes and allocates a single processor word to the data space of the most recently created word.
 
-### -
+### `-`
 - dstack: `( a b -- a-b )`
 
-### -:
-- dstack: `( a -- a-b )`
-- Attempt to parse a number `b` using `NUMBER` and create an immediate subtract using it.
-
-### -1
-- dstack: `( a -- a-1 )`
-
-### .
+### `.`
 - dstack: `( w -- )`
 - Print a signed number `w` using the base specified in `BASE`.
 
-### ."
-- Compile-time pattern: `'^ ([^ ]*)"'`
-- Prints out the string pattern.
+### `."`
+- Compile:
+  - Pattern: `'^ ([^ ]*)"'`
+  - Appends the run semantics to the current word.
+- Run:
+  - Prints out the string pattern.
 
-### .U
-- dstack: `( w -- )`
-- Print an unsigned number `w` using the base specified in `BASE`.
-
-### :
+### `:`
 - Compile-time pattern: `'^ ([^ ]*)(?: |$)'`
-- Updates `hered_start` with the current `hered`.
 - Creates a new unfinished word entry in the dictionary with the name matched by the capture group in the pattern.
 - Enters compilation mode.
-- Resets tail call variables.
 
-### :NONAME
-- dstack: `( -- xt )`
-- Makes a new anonymous word.
-- Places the execution token of this anonymous word on the stack.
-- Updates `hered_start` with the current `hered`.
-- Creates a new unfinished word entry in the dictionary with the name matched by the capture group in the pattern.
-- Enters compilation mode.
-- Resets tail call variables.
+### `;`
+- Finish the definition of this word and insert an `EXIT`.
 
-### ;
-- Finish the definition of this word, perform a tail-call optimization if possible, and if not insert an `EXIT`.
+### `<`
+- dstack: `( a b -- bool )`
+- Puts a `1` on the stack if `a` is less than `b`, `0` otherwise.
+
+### `=`
+- dstack: `( a b -- bool )`
+- Puts a `1` on the stack if `a` and `b` are equal, `0` otherwise.
+
+### `>`
+- dstack: `( a b -- bool )`
+- Puts a `1` on the stack if `a` is greater than `b`, `0` otherwise.
+
+### `>BODY`
+- dstack: `( xt -- addr )`
+- Places the data-space address of execution token `xt` on the stack.
 
 ### @
 - dstack: `( addr -- w )`
@@ -172,17 +161,18 @@ Word patterns are enclosed in single quotes (') and are represented using a rege
 ### CREATE
 - Compile-time pattern: `'^ ([^ ]*)(?: |$)'`
 - Creates a new word entry with the name given by the pattern.
-- Resets tail call variables.
-
-### CREATE_RAW
-- Compile-time pattern: `'^ ([^ ]*)(?: |$)'`
-- Creates a new word entry with the name given by the pattern.
-- Does not add `LOADDS` automatically, so this can be used for optimization.
-- Resets tail call variables.
 
 ### DEFER
 - dstack: `( ins -- )`
 - Adds an instruction to the word currently being built.
+
+### DO
+- Run:
+  - dstack: `( n -- )`
+  - Begins a loop which will execute `n` times.
+- Compile:
+  - dstack: `( -- paddr )`
+  - Places the program address `paddr` onto the stack to place `pc - paddr - 3` at `LOOP`.
 
 ### DOES>
 - Compile a combination of code and data to a new word up until a `;`.
@@ -203,113 +193,177 @@ Word patterns are enclosed in single quotes (') and are represented using a rege
 ### EXIT
 - Returns from the current word.
 
-### FOR
-- dstack: `( w -- )`
-- Compile-time dstack: `( -- addr )`
-  - Pushes the address where the address of the last instruction needs to be added.
-- Takes a number of times to iterate and iterates that many times.
-
-### FOREVER
-- Compile-time dstack: `( -- addr )`
-  - Pushes the address where the address of the last instruction needs to be added.
-- Begins a loop which loops forever.
-
 ### FORGET
 - pattern: `'^ ([^ ]*)(?: |$)'`
 - Forgets everything after and including the specified word.
 
-### GETCDS
+### hered
 - dstack: `( -- addr )`
-- Get the address of the current data space location.
-- This is compiled immediately into the definition and therefore does not affect the address.
-
-### HERED!
-- dstack: `( hered -- )`
 - Stores the data space post-increment stack pointer.
 
-### HERED@
-- dstack: `( -- hered )`
-- Reads the data space post-increment stack pointer.
+### herep
+- dstack: `( -- paddr )`
+- The program memory post-increment stack pointer.
 
-### hered_start
-- Contains the beginning of the current definition's hered.
-- This is used to track how many things are in the current definition's data space.
-
-### HEREP!
-- dstack: `( herep -- )`
-- Stores the program memory post-increment stack pointer.
-
-### HEREP@
-- dstack: `( -- herep )`
-- Reads the program memory post-increment stack pointer.
-
-### HEREB!
-- dstack: `( hereb -- )`
-- Stores the address of the dictionary head/beginning (the xt of the most recent word).
-
-### HEREB@
-- dstack: `( -- hereb )`
-- Gets the address of the dictionary head/beginning (the xt of the most recent word).
+### hereb
+- dstack: `( -- addr )`
+- The address of the dictionary head/beginning (the most recent word that is complete).
 
 ### I
 - dstack: `( -- i )`
 - Gets inner loop iterator.
 
+### IDO
+- Run:
+  - dstack: `( -- )`
+  - Begins an infinite loop which can only be broken out of using `LEAVE`.
+- Compile:
+  - dstack: `( -- paddr )`
+  - Places the program address `paddr` onto the stack to place `pc - paddr - 3` at `LOOP`.
+
 ### IF=
-- dstack: `( a b -- )`
-- Goes to `ELSE` or `THEN` if there is none if the condition is not met.
+- Run:
+  - dstack: `( a b -- )`
+  - Goes to `ELSE` or `THEN` if there is none if the condition is not met.
+  - Checks for equal.
+- Compile:
+  - dstack: `( -- paddr )`
+  - Adds the program address to write the relative address `pc - paddr` to for jumping to the else.
 
 ### IF!=
-- dstack: `( a b -- )`
-- Goes to `ELSE` or `THEN` if there is none if the condition is not met.
+- Run:
+  - dstack: `( a b -- )`
+  - Goes to `ELSE` or `THEN` if there is none if the condition is not met.
+  - Checks for not equal.
+- Compile:
+  - dstack: `( -- paddr )`
+  - Adds the program address to write the relative address `pc - paddr` to for jumping to the else.
 
 ### IF>
-- dstack: `( a b -- )`
-- Goes to `ELSE` or `THEN` if there is none if the condition is not met.
+- Run:
+  - dstack: `( a b -- )`
+  - Goes to `ELSE` or `THEN` if there is none if the condition is not met.
+  - Checks for greater than.
+- Compile:
+  - dstack: `( -- paddr )`
+  - Adds the program address to write the relative address `pc - paddr` to for jumping to the else.
 
 ### IF>=
-- dstack: `( a b -- )`
-- Goes to `ELSE` or `THEN` if there is none if the condition is not met.
+- Run:
+  - dstack: `( a b -- )`
+  - Goes to `ELSE` or `THEN` if there is none if the condition is not met.
+  - Checks for greater than or equal to.
+- Compile:
+  - dstack: `( -- paddr )`
+  - Adds the program address to write the relative address `pc - paddr` to for jumping to the else.
 
 ### IF>U
-- dstack: `( a b -- )`
-- Goes to `ELSE` or `THEN` if there is none if the condition is not met.
-- Performs an unsigned comparison.
+- Run:
+  - dstack: `( a b -- )`
+  - Goes to `ELSE` or `THEN` if there is none if the condition is not met.
+  - Checks for greater than unsigned.
+- Compile:
+  - dstack: `( -- paddr )`
+  - Adds the program address to write the relative address `pc - paddr` to for jumping to the else.
 
 ### IF>=U
-- dstack: `( a b -- )`
-- Goes to `ELSE` or `THEN` if there is none if the condition is not met.
-- Performs an unsigned comparison.
+- Run:
+  - dstack: `( a b -- )`
+  - Goes to `ELSE` or `THEN` if there is none if the condition is not met.
+  - Checks for greater than or equal to unsigned.
+- Compile:
+  - dstack: `( -- paddr )`
+  - Adds the program address to write the relative address `pc - paddr` to for jumping to the else.
 
 ### IFC
-- dstack: `( a b -- )`
-- Goes to `ELSE` or `THEN` if there is none if the condition is not met.
-- Checks for carry bit status.
+- Run:
+  - dstack: `( a b -- )`
+  - Goes to `ELSE` or `THEN` if there is none if the condition is not met.
+  - Checks for carry bit set.
+- Compile:
+  - dstack: `( -- paddr )`
+  - Adds the program address to write the relative address `pc - paddr` to for jumping to the else.
 
 ### IFC!
-- dstack: `( a b -- )`
-- Goes to `ELSE` or `THEN` if there is none if the condition is not met.
-- Checks for carry bit status.
+- Run:
+  - dstack: `( -- )`
+  - Goes to `ELSE` or `THEN` if there is none if the condition is not met.
+  - Checks for not carry bit set.
+- Compile:
+  - dstack: `( -- paddr )`
+  - Adds the program address to write the relative address `pc - paddr` to for jumping to the else.
 
 ### IFO
-- dstack: `( a b -- )`
-- Goes to `ELSE` or `THEN` if there is none if the condition is not met.
-- Checks for overflow bit status.
+- Run:
+  - dstack: `( -- )`
+  - Goes to `ELSE` or `THEN` if there is none if the condition is not met.
+  - Checks for overflow bit set.
+- Compile:
+  - dstack: `( -- paddr )`
+  - Adds the program address to write the relative address `pc - paddr` to for jumping to the else.
 
 ### IFO!
-- dstack: `( a b -- )`
-- Goes to `ELSE` or `THEN` if there is none if the condition is not met.
-- Checks for overflow bit status.
+- Run:
+  - dstack: `( -- )`
+  - Goes to `ELSE` or `THEN` if there is none if the condition is not met.
+  - Checks for not overflow bit set.
+- Compile:
+  - dstack: `( -- paddr )`
+  - Adds the program address to write the relative address `pc - paddr` to for jumping to the else.
 
 ### IFI
-- dstack: `( a b -- )`
-- Goes to `ELSE` or `THEN` if there is none if the condition is not met.
-- Checks for interrupt bit status, which clears it if it was set.
+- Run:
+  - dstack: `( -- )`
+  - Goes to `ELSE` or `THEN` if there is none if the condition is not met.
+  - Checks for interrupt bit set.
+- Compile:
+  - dstack: `( -- paddr )`
+  - Adds the program address to write the relative address `pc - paddr` to for jumping to the else.
 
 ### IFI!
-- dstack: `( a b -- )`
-- Goes to `ELSE` or `THEN` if there is none if the condition is not met.
-- Checks for interrupt bit status, which clears it if it was set.
+- Run:
+  - dstack: `( -- )`
+  - Goes to `ELSE` or `THEN` if there is none if the condition is not met.
+  - Checks for not interrupt bit set.
+- Compile:
+  - dstack: `( -- paddr )`
+  - Adds the program address to write the relative address `pc - paddr` to for jumping to the else.
+
+### IFZ
+- Run:
+  - dstack: `( a -- )`
+  - Goes to `ELSE` or `THEN` if there is none if the condition is not met.
+  - Checks for zero.
+- Compile:
+  - dstack: `( -- paddr )`
+  - Adds the program address to write the relative address `pc - paddr` to for jumping to the else.
+
+### IFZ!
+- Run:
+  - dstack: `( a -- )`
+  - Goes to `ELSE` or `THEN` if there is none if the condition is not met.
+  - Checks for not zero.
+- Compile:
+  - dstack: `( -- paddr )`
+  - Adds the program address to write the relative address `pc - paddr` to for jumping to the else.
+
+### IFA
+- Run:
+  - dstack: `( b -- )`
+  - Goes to `ELSE` or `THEN` if there is none if the condition is not met.
+  - Checks for available interrupt on bus `b`.
+- Compile:
+  - dstack: `( -- paddr )`
+  - Adds the program address to write the relative address `pc - paddr` to for jumping to the else.
+
+### IFA!
+- Run:
+  - dstack: `( b -- )`
+  - Goes to `ELSE` or `THEN` if there is none if the condition is not met.
+  - Checks for no available interrupt on bus `b`.
+- Compile:
+  - dstack: `( -- paddr )`
+  - Adds the program address to write the relative address `pc - paddr` to for jumping to the else.
 
 ### INTERPRET
 - Interprets whatever is at the TIB, processing each word using `shell_xt` until all words are consumed.
@@ -324,7 +378,7 @@ Word patterns are enclosed in single quotes (') and are represented using a rege
 
 ### KEY
 - dstack: `( -- c )`
-- Retrieves a key from the input device.
+- Retrieves a key character `c` in ASCII from the input device.
 
 ### L
 - dstack: `( -- l )`
@@ -334,19 +388,12 @@ Word patterns are enclosed in single quotes (') and are represented using a rege
 - dstack: `( -- w )`
 - Compile-time dstack: `( w -- )`
 
-### LOAD
-- dstack: `( -- w )`
-- Load an immediate word from the data space.
-
-### LOADDS
-- dstack: `( addr -- )`
-- Loads the data space address `addr`.
-- This is compiled to any word which uses its data space immediately when it is required (many words may not).
-
 ### LOOP
-- Compile-time dstack: `( addr -- )`
-  - Places the address of the instruction before this at the address `addr`.
-- Ends a loop definition.
+- Compile:
+  - dstack: `( addr -- )`
+  - Consumes the loop address and terminates the loop definition.
+- Run:
+  - Repeats the condition of the loop and checks it again.
 
 ### NL
 - dstack: `( -- '\n' )`
@@ -354,35 +401,22 @@ Word patterns are enclosed in single quotes (') and are represented using a rege
 
 ### NUMBER
 - dstack: `( -- w )`
-- Reads a number from the `PP` with the proper base from `base`.
+- Reads a number from the `pp` with the base from `base` or aborts on failure.
 
 ### POSTPONE
 - Compile-time pattern: `'^ ([^ ]*)(?: |$)'`
-- Finds a word and compiles in the ability for the current word to add that word to the definition of another word appropriately when it is ran.
-- This is called repeatedly on all words after a `DOES>` up until the `;`, thus it provides the same behavior.
+- Append the compilation semantics of the word to the current word's defintion.
 
-### PP!
-- dstack: `( pp -- )`
-- Stores the pointer to the location of the input processing position.
-
-### PP@
-- dstack: `( -- pp )`
-- Provides the pointer to the location of the input processing position.
+### pp
+- dstack: `( -- addr )`
+- Places the address `addr` of the input processing position on the stack.
 
 ### QUIT
 - This is called at the beginning of the program and when any fault occurs.
 - This resets everything in the processor and returns control to the shell.
 
-### R<
-- dstack: `( w -- )`
-- Places `w` on the r-stack.
-
-### R>
-- dstack: `( -- w )`
-- Takes `w` from the r-stack.
-
 ### REVEAL
-- Reveals and finishes the most recent word, also performing tail-call optimization on it.
+- Reveals and finishes the most recent word, moving hereb to its location.
 
 ### ROT:
 - dstack: `( w .. - .. w )`
@@ -427,6 +461,10 @@ Word patterns are enclosed in single quotes (') and are represented using a rege
 - dstack: `( str -- )`
 - Takes a string address from the stack and sends/prints it to the terminal device.
   - Control characters may interface with the terminal.
+
+### U.
+- dstack: `( w -- )`
+- Print an unsigned number `w` using the base specified in `BASE`.
 
 ### UNDO
 - Removes the most recent word from the dictionary.
