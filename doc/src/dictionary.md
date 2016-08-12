@@ -124,10 +124,6 @@ Word patterns are enclosed in single quotes (') and are represented using a rege
 - dstack: `( addr1 n -- addr2 )`
 - Writes characters from the input up to `n` characters at address `addr1`, `addr2` is the address following the last character written.
 
-### `ABS`
-- dstack: `( w -- u )`
-- Finds the absolute value of w.
-
 ### `ALLOT`
 - dstack: `( w -- )`
 - Allocates, but does not initialize, `w` total processor words to the data space of the most recently created word.
@@ -188,8 +184,8 @@ Word patterns are enclosed in single quotes (') and are represented using a rege
 - Sets `base` to `10`.
 
 ### `DEFER`
-- dstack: `( ins -- )`
-- Adds an instruction to the word currently being built.
+- dstack: `( o -- )`
+- Adds an octet `o` to the word currently being built.
 
 ### `DO`
 - Compile:
@@ -241,6 +237,10 @@ Word patterns are enclosed in single quotes (') and are represented using a rege
 ### `EXIT`
 - Returns from the current word.
 
+### `FALSE`
+- dstack: `( -- false )`
+- Places a `0` on the stack.
+
 ### `FILL`
 - dstack: `( u w addr -- )`
 - Fill the location at address `addr` with `u` number of the processor word `w`.
@@ -268,6 +268,10 @@ Word patterns are enclosed in single quotes (') and are represented using a rege
 ### `hereb`
 - dstack: `( -- addr )`
 - Provides the address of the dictionary head/beginning (the most recent word that is complete).
+
+### `HEX`
+- dstack: `( -- )`
+- Sets `base` to `16`.
 
 ### `I`
 - dstack: `( -- i )`
@@ -492,6 +496,9 @@ Word patterns are enclosed in single quotes (') and are represented using a rege
 ### `NEGATE`
 - dstack: `( a -- -a )`
 
+### `NIP`
+- dstack: `( a b -- b )`
+
 ### `NL`
 - dstack: `( -- '\n' )`
 - Adds the character for newline to the stack.
@@ -573,6 +580,13 @@ Word patterns are enclosed in single quotes (') and are represented using a rege
   - dstack: `( paddr -- )`
 - Run:
   - Signifies the location which an if statement ends at.
+
+### `TRUE`
+- dstack: `( -- true )`
+- Places a `1` on the stack.
+
+### `TUCK`
+- dstack: `( a b -- b a b )`
 
 ### `TYPE`
 - dstack: `( addr n -- )`
