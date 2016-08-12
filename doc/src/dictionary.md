@@ -54,6 +54,32 @@ Word patterns are enclosed in single quotes (') and are represented using a rege
 - Run:
   - Prints out the string pattern.
 
+### `/`
+- dstack: `( a b -- a/b )`
+
+### `/MOD`
+- dstack: `( a b -- a%b a/b )`
+
+### `0<`
+- dstack: `( a -- bool )`
+- Puts a `1` on the stack if `a < 0` (signed comparison), `0` otherwise.
+
+### `0=`
+- dstack: `( a -- bool )`
+- Puts a `1` on the stack if `a == 0`, `0` otherwise.
+
+### `1+`
+- dstack: `( a -- a+1 )`
+
+### `1-`
+- dstack: `( a -- a-1 )`
+
+### `2*`
+- dstack: `( a -- a*2 )`
+
+### `2/`
+- dstack: `( a -- a/2 )`
+
 ### `:`
 - Compile-time pattern: `'^ ([^ ]*)(?: |$)'`
 - Creates a new unfinished word entry in the dictionary with the name matched by the capture group in the pattern.
@@ -78,83 +104,65 @@ Word patterns are enclosed in single quotes (') and are represented using a rege
 - dstack: `( xt -- addr )`
 - Places the data-space address of execution token `xt` on the stack.
 
-### @
+### `@`
 - dstack: `( addr -- w )`
 - Reads `w` from the address `addr`.
 
-### @:
-- dstack: `( -- w )`
-- Compile-time pattern: `'^ ([^ ]*)(?: |$)'`
-- Reads `w` from the variable token specified in the pattern.
-- Can also be used to find the address of the body of many tokens.
+### `ABORT`
+- dstack: `( -- )`
+- Has the same functionality as `QUIT` in UFORTH.
 
-### [
-- Enter into run mode.
-
-### \
-- pattern: `'^ ([^ ]*)$'`
-- Ignores everything else on the line.
-
-### ]
-- Enter into compilation mode.
-
-### ^
-- dstack: `( a b -- a^b )`
-
-### |
-- dstack: `( a b -- a|b )`
-
-### ~
-- dstack: `( a -- ~a )`
-
-### 2*
-- dstack: `( w -- w*2 )`
-
-### 2/
-- dstack: `( w -- w/2 )`
-
-### ABORT"
+### `ABORT"`
 - pattern: `'^ ([^ ]*)"'`
 - Compiles the specified message into the current word and prints it along with executing `QUIT`.
 
-### ABS
+### `ABS`
+- dstack: `( a -- abs(a) )`
+- Computes the absolute value of `a`.
+
+### `ACCEPT`
+- dstack: `( addr1 n -- addr2 )`
+- Writes characters from the input up to `n` characters at address `addr1`, `addr2` is the address following the last character written.
+
+### `ABS`
 - dstack: `( w -- u )`
 - Finds the absolute value of w.
 
-### ALLOT
+### `ALLOT`
 - dstack: `( w -- )`
 - Allocates, but does not initialize, `w` total processor words to the data space of the most recently created word.
 
-### base
-- Contains the base that numbers should be interpreted with using `NUMBER`.
+### `AND`
+- dstack: `( a b -- a&b )`
 
-### BL
+### `base`
+- dstack: `( -- addr )`
+- Retrieves the address to the base that numbers should be interpreted with using `NUMBER`.
+
+### `BL`
 - dstack: `( -- ' ' )`
 - Adds the character for space/blank to the stack.
 
-### BREAK
-- Breaks out of a loop.
-
-### BS
+### `BS`
 - dstack: `( -- '\b' )`
 - Adds the character for backspace to the stack.
 
-### CALL
-- dstack: `( pa -- )`
-- Calls the program address `pa` on the stack.
-
-### CALLED
-- dstack: `( ins -- )`
-- Updates the various tail words to indicate the new tail call instruction to be optimized if `;` is encountered.
-
-### COMPILE,
+### `COMPILE,`
 - dstack: `( xt -- )`
 - Adds a call to the execution token `xt` directly into the current word.
 
-### CONTINUE
+### `CONSTATNT`
+- Compile:
+  - dstack: `( n -- )`
+  - pattern: `'^ ([^ ]*)(?: |$)'`
+    - The matched pattern becomes the name of the word.
+- Run:
+  - dstack: `( -- n )`
+
+### `CONTINUE`
 - Continues a loop on the next iteration from the beginning.
 
-### COPY:
+### `COPY:`
 - dstack: `( w .. - w .. w )`
 - Aquires the next number using `NUMBER` and compiles an immediate stack copy to the top from a specific depth.
 
@@ -183,31 +191,39 @@ Word patterns are enclosed in single quotes (') and are represented using a rege
 - dstack: `( w -- )`
 
 ### ELSE
-- The alternate case of an `IF` statement.
+- Compile:
+  - dstack: `( paddr1 -- paddr2 )`
+  - Writes `pc - paddr1` to `paddr1` and creates a new `paddr2` for the invocation of `THEN` to write to.
+- Run:
+  - Specifies the location to go to in an `IF` statement if the condition is false.
 
 ### EMIT
 - dstack: `( c -- )`
 - Print the character c on the terminal.
   - This can control the terminal using the backspace and newline characters.
 
+### EXECUTE
+- dstack: `( xt -- .. )`
+- Executes an execution token.
+
 ### EXIT
 - Returns from the current word.
 
 ### FORGET
 - pattern: `'^ ([^ ]*)(?: |$)'`
-- Forgets everything after and including the specified word.
+- Forgets everything defined after and including the specified word.
 
 ### hered
 - dstack: `( -- addr )`
-- Stores the data space post-increment stack pointer.
+- Provides the address of the data space post-increment stack pointer.
 
 ### herep
-- dstack: `( -- paddr )`
-- The program memory post-increment stack pointer.
+- dstack: `( -- addr )`
+- Provides the address of the program memory post-increment stack pointer.
 
 ### hereb
 - dstack: `( -- addr )`
-- The address of the dictionary head/beginning (the most recent word that is complete).
+- Provides the address of the dictionary head/beginning (the most recent word that is complete).
 
 ### I
 - dstack: `( -- i )`
@@ -384,6 +400,12 @@ Word patterns are enclosed in single quotes (') and are represented using a rege
 - dstack: `( -- l )`
 - Gets fourth most inner loop iterator.
 
+### `LEAVE`
+- Compile:
+  - dstack: `( -- )`
+- Run:
+  - Breaks out of a loop.
+
 ### LITERAL
 - dstack: `( -- w )`
 - Compile-time dstack: `( w -- )`
@@ -407,90 +429,74 @@ Word patterns are enclosed in single quotes (') and are represented using a rege
 - Compile-time pattern: `'^ ([^ ]*)(?: |$)'`
 - Append the compilation semantics of the word to the current word's defintion.
 
+### pa
+- dstack: `( -- addr )`
+- Places the address `addr` of the input processing address (which is also an address) on the stack.
+  - This address points to the beginning of where the input buffer begins.
+
 ### pp
 - dstack: `( -- addr )`
-- Places the address `addr` of the input processing position on the stack.
+- Places the address `addr` of the input processing position (which is also an address) on the stack.
 
 ### QUIT
 - This is called at the beginning of the program and when any fault occurs.
-- This resets everything in the processor and returns control to the shell.
+- This soft-resets everything in the processor and returns control to the shell.
 
 ### REVEAL
 - Reveals and finishes the most recent word, moving hereb to its location.
+
+### ROT
+- dstack: `( a b c - b c a )`
 
 ### ROT:
 - dstack: `( w .. - .. w )`
 - Aquires the next number using `NUMBER` and compiles an immediate stack rotate to the top from a specific depth.
 
 ### S"
-- dstack: `( -- str )`
+- dstack: `( -- addr )`
 - Compile-time pattern: `'^ ([^ ]*)"'`
-- Puts the string specified at compile-time onto the stack.
+- Puts the address of the string specified at compile-time onto the stack.
 
 ### SCAN
-- dstack: `( c -- addr )`
-- Scans from `PP` out until the character `c` is found, then returning the address of c.
-
-### SELF
-- dstack: `( .. -- .. )`
-- Executes the word currently being compiled, allowing for recursion of itself.
-  - This can create a data race if the word performs an immediate write of a variable in its own data space.
-    - This can/may be intentional.
+- dstack: `( c n -- addr )`
+- Scans from `PP` out until the character `c` is found, checking up to `n` characters, then returning the address of c.
 
 ### shell_xt
 - Contains the xt which is used by `INTERPRET` for determining what to do with words.
+  - This can be `(compile)` or `(run)`.
+    - If it is not either of these, words executed which have different run-time and compile-time operation will choose the run-time option instead.
+      - This is a convention that new words that have such behavior should also follow, though it is not necessary for the system to operate correctly.
 
 ### STATE
-- Sets the carry bit to `1` if the compiler is in compilation state. Any user-defined states will appear as `0`.
-
-### tail_paddr
-- Contains the program address off the tail call.
-- If this is 0, no replacement happens.
-
-### tail_ins
-- Contains the instruction (properly shifted to the correct processor word position) to replace at the tail address.
+- dstack: `( -- bool )`
+- Places a `1` on the stack if the system is in `(compile)` mode, `0` otherwise.
 
 ### THEN
-- The end of an `IF` statement.
-
-### TIB@
-- dstack: `( -- tib )`
-- Adds the address of the terminal input buffer to the stack.
+- Compile:
+  - dstack: `( paddr -- )`
+- Run:
+  - Signifies the location which an if statement ends at.
 
 ### TYPE
-- dstack: `( str -- )`
-- Takes a string address from the stack and sends/prints it to the terminal device.
+- dstack: `( addr n -- )`
+- Types `n` characters from `addr` to the terminal.
   - Control characters may interface with the terminal.
 
 ### U.
 - dstack: `( w -- )`
 - Print an unsigned number `w` using the base specified in `BASE`.
 
-### UNDO
-- Removes the most recent word from the dictionary.
-- This is used automatically when an issue occurs when attempting to compile a word.
-
 ### WORD
 - dstack: `( c -- str )`
 - Compile-time pattern: `'^ ([^ ]*)(?: |$)'`
-- Takes a character delimiter and places a string at hered from the input, then returns the address of the string.
+- Takes a character delimiter and places a string in the data space at hered, then returns the address of the string.
 
-### XT>DATA@
-- dstack: `( xt -- addr )`
-- Consumes an execution token and produces the data space address of the program.
-  - If the word has no data space, this will return 0.
-
-### XT>EXEC
-- dstack: `( xt -- .. )`
-- Executes an execution token. This is not an efficient method of executing and it is recommended to compile execution directly into any word, which will optimize the call appropriately.
-- Sets DC0 to the xt and does a jumpi.
-  - If only one value is consumed by the word, it can use it immediately instead of loading a new DC0.
-
-### XT>NAME@
+### XT>NAME
 - dstack: `( xt -- str )`
 - Consumes an execution token and produces the address to the name of the xt in UFORTH string format.
 
-### XT>PROG@
-- dstack: `( xt -- pa )`
-- Consumes an execution token and produces a program address which can be called or jumped to.
-  - If this token has no program this will return 0.
+### [
+- Enter into run mode.
+
+### ]
+- Enter into compilation mode.
