@@ -9,7 +9,8 @@ Word patterns are enclosed in single quotes (') and are represented using a rege
 ### `'`
 - dstack: `( -- xt )`
 - pattern: `'^ ([^ ]*)(?: |$)'`
-- Places the execution token of the word found on the stack.
+- Places the execution token of the word found on the stack, if not found returns `0`.
+  - An execution token will never be 0.
 
 ### `(compile)`
 - pattern: `'^ ([^ ]*)(?: |$)'`
@@ -218,6 +219,10 @@ Word patterns are enclosed in single quotes (') and are represented using a rege
 ### `DUP`
 - dstack: `( w -- w w )`
 
+### `DWORD`
+- dstack: `( addr c - n )`
+- Counts the amount of characters until the delimiter `c` is found at `addr` and adds it to the stack.
+
 ### `ELSE`
 - Compile:
   - dstack: `( paddr1 -- paddr2 )`
@@ -267,7 +272,7 @@ Word patterns are enclosed in single quotes (') and are represented using a rege
 
 ### `hereb`
 - dstack: `( -- addr )`
-- Provides the address of the dictionary head/beginning (the most recent word that is complete).
+- Provides the address of the dictionary head/beginning pointer (the most recent word that is complete).
 
 ### `HEX`
 - dstack: `( -- )`
@@ -575,6 +580,10 @@ Word patterns are enclosed in single quotes (') and are represented using a rege
 - dstack: `( -- bool )`
 - Places a `1` on the stack if the system is in `(compile)` mode, `0` otherwise.
 
+### `STREQ`
+- dstack: `( addr1 addr2 n1 n2 -- bool )`
+- Checks if `n1 == n2` and returns `0` if they arent equal, otherwise returns `1` if the strings are equal, `0` otherwise.
+
 ### `THEN`
 - Compile:
   - dstack: `( paddr -- )`
@@ -604,6 +613,10 @@ Word patterns are enclosed in single quotes (') and are represented using a rege
 ### `U*`
 - dstack: `( a b -- a*b )`
 - Unsigned multiplication of `a` and `b`.
+
+### `UNLOOP`
+- dstack: `( -- )`
+- Discards the innermost loop parameters to return, jump, or branch out of the loop.
 
 ### `VARIABLE`
 - Run:

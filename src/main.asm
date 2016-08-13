@@ -21,6 +21,37 @@ calli:STATE bz:+
 
 :'_name $1 $"'
 :'
+# Set dc0 to the back stack.
+push0 calli:hereb reads set0
+# Get the string address and length on the stack.
+calli:pp reads dup calli:BL calli:DWORD
+# Place the string length in an immediate location in the loop.
+writepri:+++
+# Iterate through every dictionary entry.
+iloop:+
+    # Check if we reached the end of the dictionary
+    get0 bnz:++
+        # If so, then return 0.
+        # Restore state.
+        drop pop0 discard
+        imm8:0 return
+    ++
+    # Duplicate this string address for next iteration
+    dup
+    # Lookup and get expanded string addr count combination from dictionary entry.
+    # Offset of 2 on dictionary entry.
+    rareadi0:2 calli:COUNT
+    # Get this string length
+    imm32 +++ pfill:0,4
+    # Compare the two strings
+    calli:STREQ bz:++
+        # Found a match, so return the xt.
+        drop read0:0
+        # Restore state.
+        pop0 discard return
+    ++
+    continue
++
 
 :(compile)_name $9 $"(compile)
 :(compile)
@@ -171,6 +202,9 @@ calli:STATE bz:+
 
 :DUP_name $3 $"DUP
 :DUP
+
+:DWORD_name $5 $"DWORD
+:DWORD
 
 :ELSE_name $4 $"ELSE
 :ELSE
@@ -377,6 +411,9 @@ calli:STATE bz:+
 :STATE_name $5 $"STATE
 :STATE
 
+:STREQ_name $5 $"STREQ
+:STREQ
+
 :THEN_name $4 $"THEN
 :THEN
 
@@ -397,6 +434,9 @@ calli:STATE bz:+
 
 :U*_name $2 $"U*
 :U*
+
+:UNLOOP_name $6 $"UNLOOP
+:UNLOOP
 
 :VARIABLE_name $8 $"VARIABLE
 :VARIABLE
@@ -430,4 +470,5 @@ malign:0,2048
 ##### Backstack
 #####
 
+:'_xt $.' $$' $$'_name $0
 :!_xt $.! $$! $$!_name $1
