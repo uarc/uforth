@@ -47,6 +47,8 @@ iloop:+
     calli:STREQ bz:++
         # Found a match, so return the xt.
         drop read0:0
+        # Set the carry bit to 1 if this is an immediate instruction (this is for internal use).
+        imm8:-1 rareadi0:3 add drop
         # Restore state.
         pop0 discard return
     ++
