@@ -12,11 +12,11 @@
 :!
 # Compile mode
 calli:STATE bz:+
-    imm8:0x68 calli:DEFER
-    bra:++
+    imm8:0x68 bra:DEFER
 # Run (or other) mode
 +
     write
+    return
 ++
 
 :'_name $1 $"'
