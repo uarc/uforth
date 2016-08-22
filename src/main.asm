@@ -174,6 +174,9 @@ return
 
 :DO_name $2 $"DO
 :DO
+imm8:0xAA callri:DEFERO
+callri:herep reads
+imm8:0 bra:DEFERS
 
 :DOES_name $4 $"DOES
 :DOES
