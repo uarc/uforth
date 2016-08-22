@@ -362,6 +362,15 @@ return
 
 :NEGATE_name $6 $"NEGATE
 :NEGATE
+# Compile mode
+calli:STATE bz:+
+    # Defer `subi:0` with a tail call optimization.
+    imm16:0x0083 bra:DEFERS
+# Run (or other) mode
++
+    subi:0
+    return
+++
 
 :NIP_name $3 $"NIP
 :NIP
