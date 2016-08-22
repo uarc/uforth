@@ -189,6 +189,16 @@ return
 
 :DWORD_name $5 $"DWORD
 :DWORD
+push0
+writepri:++
+set0
+
+iloop:+
+    read0:1 imm32 ++ pfill:0,4 beq:+++
+        i0 pop0 discard return
+    +++
+    continue
++
 
 :ELSE_name $4 $"ELSE
 :ELSE
