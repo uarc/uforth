@@ -12,7 +12,7 @@ bra:INIT
 :!_name $1 $"!
 :!
 # Compile mode
-calli:STATE bz:+
+callri:STATE bz:+
     imm8:0x68 bra:DEFERO
 # Run (or other) mode
 +
@@ -23,7 +23,7 @@ calli:STATE bz:+
 :'_name $1 $"'
 :'
 # Set dc0 to the back stack.
-push0 calli:hereb reads set0
+push0 callri:hereb reads set0
 # Get the string address and length on the stack.
 callri:pp reads dup callri:BL callri:DWORD
 # Place the string length in an immediate location in the loop.
@@ -260,7 +260,7 @@ return
 :I_name $1 $"I
 :I
 # Compile mode
-calli:STATE bz:+
+callri:STATE bz:+
     # Defer `i0` with a tail call optimization.
     imm8:0x3C bra:DEFERO
 # Run (or other) mode
@@ -333,7 +333,7 @@ calli:STATE bz:+
 :J_name $1 $"J
 :J
 # Compile mode
-calli:STATE bz:+
+callri:STATE bz:+
     # Defer `i1` with a tail call optimization.
     imm8:0x3D bra:DEFERO
 # Run (or other) mode
@@ -345,7 +345,7 @@ calli:STATE bz:+
 :K_name $1 $"K
 :K
 # Compile mode
-calli:STATE bz:+
+callri:STATE bz:+
     # Defer `i2` with a tail call optimization.
     imm8:0x3E bra:DEFERO
 # Run (or other) mode
@@ -363,7 +363,7 @@ calli:STATE bz:+
 :L_name $1 $"L
 :L
 # Compile mode
-calli:STATE bz:+
+callri:STATE bz:+
     # Defer `i3` with a tail call optimization.
     imm8:0x3F bra:DEFERO
 # Run (or other) mode
@@ -375,7 +375,7 @@ calli:STATE bz:+
 :LEAVE_name $5 $"LEAVE
 :LEAVE
 # Compile mode
-calli:STATE bz:+
+callri:STATE bz:+
     # Defer `break` with a tail call optimization.
     imm8:0x11 bra:DEFERO
 # Run (or other) mode
@@ -396,7 +396,7 @@ bra:DEFERW
 :LSHIFT_name $6 $"LSHIFT
 :LSHIFT
 # Compile mode
-calli:STATE bz:+
+callri:STATE bz:+
     # Defer `lsl` with a tail call optimization.
     imm8:0x5A bra:DEFERO
 # Run (or other) mode
@@ -439,7 +439,7 @@ return
 :NEGATE_name $6 $"NEGATE
 :NEGATE
 # Compile mode
-calli:STATE bz:+
+callri:STATE bz:+
     # Defer `subi:0` with a tail call optimization.
     imm16:0x0083 bra:DEFERS
 # Run (or other) mode
@@ -451,7 +451,7 @@ calli:STATE bz:+
 :NIP_name $3 $"NIP
 :NIP
 # Compile mode
-calli:STATE bz:+
+callri:STATE bz:+
     # Defer `rot1 drop` with a tail call optimization.
     imm16:0xAFC1 bra:DEFERS
 # Run (or other) mode
@@ -463,7 +463,7 @@ calli:STATE bz:+
 :NL_name $2 $"NL
 :NL
 # Compile mode
-calli:STATE bz:+
+callri:STATE bz:+
     # Defer imm8:0xA with a tail call optimization.
     imm16:0x0A94 bra:DEFERS
 # Run (or other) mode
@@ -478,7 +478,7 @@ calli:STATE bz:+
 :OR_name $2 $"OR
 :OR
 # Compile mode
-calli:STATE bz:+
+callri:STATE bz:+
     # Defer an or with a tail call optimization.
     imm8:0xA0 bra:DEFERO
 # Run (or other) mode
@@ -490,7 +490,7 @@ calli:STATE bz:+
 :OVER_name $4 $"OVER
 :OVER
 # Compile mode
-calli:STATE bz:+
+callri:STATE bz:+
     # Defer a rot1 with a tail call optimization.
     imm8:0xC1 bra:DEFERO
 # Run (or other) mode
@@ -502,7 +502,7 @@ calli:STATE bz:+
 :pa_name $2 $"pa
 :pa
 # Compile mode
-calli:STATE bz:+
+callri:STATE bz:+
     # Defer an imm16 instruction.
     imm8:0x95 callri:DEFERO
     # Defer the 16-bit immediate address of the variable and perform a tail call optimization.
@@ -524,7 +524,7 @@ calli:STATE bz:+
 :pp_name $2 $"pp
 :pp
 # Compile mode
-calli:STATE bz:+
+callri:STATE bz:+
     # Defer an imm16 instruction.
     imm8:0x95 callri:DEFERO
     # Defer the 16-bit immediate address of the variable and perform a tail call optimization.
