@@ -247,15 +247,59 @@ return
 
 :hered_name $5 $"hered
 :hered
+# Compile mode
+callri:STATE bz:+
+    # Defer an imm16 instruction.
+    imm8:0x95 callri:DEFERO
+    # Defer the 16-bit immediate address of the variable and perform a tail call optimization.
+    imm16:$hered_var bra:DEFERS
+# Run (or other) mode
++
+    # Add the variable address to the stack.
+    imm16:$hered_var
+    return
+++
+
+:hered_var $$dictionary_end
 
 :herep_name $5 $"herep
 :herep
+# Compile mode
+callri:STATE bz:+
+    # Defer an imm16 instruction.
+    imm8:0x95 callri:DEFERO
+    # Defer the 16-bit immediate address of the variable and perform a tail call optimization.
+    imm16:$herep_var bra:DEFERS
+# Run (or other) mode
++
+    # Add the variable address to the stack.
+    imm16:$herep_var
+    return
+++
+
+:herep_var $.dictionary_end
 
 :hereb_name $5 $"hereb
 :hereb
+# Compile mode
+callri:STATE bz:+
+    # Defer an imm16 instruction.
+    imm8:0x95 callri:DEFERO
+    # Defer the 16-bit immediate address of the variable and perform a tail call optimization.
+    imm16:$hereb_var bra:DEFERS
+# Run (or other) mode
++
+    # Add the variable address to the stack.
+    imm16:$hereb_var
+    return
+++
+
+:hereb_var $$backstack_head
 
 :HEX_name $3 $"HEX
 :HEX
+imm8:16 callri:base write
+return
 
 :I_name $1 $"I
 :I
@@ -632,6 +676,8 @@ pop1 pop0 imm8:1 return
 
 :]_name $1 $"]
 :
+
+:dictionary_end
 
 # Align the segments
 palign:0x3C,2048
