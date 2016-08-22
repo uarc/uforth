@@ -165,12 +165,33 @@ return
 
 :DEFERO_name $6 $"DEFERO
 :DEFERO
+# Aquire the address of the program head pointer.
+callri:herep
+# Copy the address, read from it, and store the short to program memory, leaving the program pointer on the stack.
+copy0 reads rot2 copy1 writepo
+# Advance the program pointer by 1 and write back the new head.
+inc rot1 write
+return
 
 :DEFERS_name $6 $"DEFERS
 :DEFERS
+# Aquire the address of the program head pointer.
+callri:herep
+# Copy the address, read from it, and store the short to program memory, leaving the program pointer on the stack.
+copy0 reads rot2 copy1 writeps
+# Advance the program pointer by 2 (the amount of octets in a short) and write back the new head.
+addi:2 rot1 write
+return
 
 :DEFERW_name $6 $"DEFERW
 :DEFERW
+# Aquire the address of the program head pointer.
+callri:herep
+# Copy the address, read from it, and store the value to program memory, leaving the program pointer on the stack.
+copy0 reads rot2 copy1 writep
+# Advance the program pointer by 4 (the amount of octets in a processor word) and write back the new head.
+addi:4 rot1 write
+return
 
 :DO_name $2 $"DO
 :DO
