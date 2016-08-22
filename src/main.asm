@@ -162,6 +162,8 @@ return
 
 :DECIMAL_name $7 $"DECIMAL
 :DECIMAL
+imm8:10 callri:base write
+return
 
 :DEFERO_name $6 $"DEFERO
 :DEFERO
