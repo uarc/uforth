@@ -338,9 +338,22 @@ return
 
 :LEAVE_name $5 $"LEAVE
 :LEAVE
+# Compile mode
+calli:STATE bz:+
+    # Defer `break` with a tail call optimization.
+    imm8:0x11 bra:DEFERO
+# Run (or other) mode
++
+    # NOTE: Should this even be allowed?
+    break
+++
 
 :LITERAL_name $7 $"LITERAL
 :LITERAL
+# Defer `imm32`.
+imm8:0x96 callri:DEFERO
+# Defer the immediate literal and perform a tail call optimization.
+bra:DEFERW
 
 :LOOP_name $4 $"LOOP
 :LOOP
