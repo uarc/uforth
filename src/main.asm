@@ -350,9 +350,21 @@ return
 
 :MAX_name $3 $"MAX
 :MAX
+copy1 copy1 bles:+
+    drop
+    return
++
+    rot1 drop
+    return
 
 :MIN_name $3 $"MIN
 :MIN
+copy1 copy1 bles:+
+    rot1 drop
+    return
++
+    drop
+    return
 
 :MOD_name $3 $"MOD
 :MOD
