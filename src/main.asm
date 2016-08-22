@@ -359,6 +359,13 @@ return
 
 :MOVE_name $4 $"MOVE
 :MOVE
+push0 push1
+set1 set0
+loop:+
+    read0:1 writepre0:1
++
+pop1 pop0
+return
 
 :NEGATE_name $6 $"NEGATE
 :NEGATE

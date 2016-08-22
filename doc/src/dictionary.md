@@ -504,7 +504,7 @@ Word patterns are enclosed in single quotes (') and are represented using a rege
 - dstack: `( a b -- a%b )`
 
 ### `MOVE`
-- dstack: `( addr1 addr2 n -- )`
+- dstack: `( n addr1 addr2 -- )`
 - Moves `n` processor words from `addr1` to `addr2`.
 
 ### `NEGATE`
