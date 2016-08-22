@@ -185,9 +185,17 @@ Word patterns are enclosed in single quotes (') and are represented using a rege
 - dstack: `( -- )`
 - Sets `base` to `10`.
 
-### `DEFER`
+### `DEFERO`
 - dstack: `( o -- )`
 - Adds an octet `o` to the word currently being built.
+
+### `DEFERS`
+- dstack: `( s -- )`
+- Adds a short (two octets) `s` to the word currently being built.
+
+### `DEFERW`
+- dstack: `( w -- )`
+- Adds a processor word `w` to the word currently being built.
 
 ### `DO`
 - Compile:

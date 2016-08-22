@@ -2,11 +2,10 @@
 ##### Init
 #####
 
-:init_string1 $5 $"blah5
-:init_string2 $5 $"blah8
+:find_token_string $1 $"'
 
 :INIT
-imm8:$init_string1 callri:COUNT imm8:$init_string2 callri:COUNT callri:STREQ drop
+imm8:$find_token_string callri:COUNT imm8:$init_string2 callri:COUNT callri:STREQ drop
 bra:INIT
 
 #####
@@ -17,7 +16,7 @@ bra:INIT
 :!
 # Compile mode
 calli:STATE bz:+
-    imm8:0x68 bra:DEFER
+    imm8:0x68 bra:DEFERO
 # Run (or other) mode
 +
     write
@@ -195,8 +194,14 @@ return
 :DECIMAL_name $7 $"DECIMAL
 :DECIMAL
 
-:DEFER_name $5 $"DEFER
-:DEFER
+:DEFERO_name $6 $"DEFERO
+:DEFERO
+
+:DEFERS_name $6 $"DEFERS
+:DEFERS
+
+:DEFERW_name $6 $"DEFERW
+:DEFERW
 
 :DO_name $2 $"DO
 :DO
@@ -384,6 +389,20 @@ return
 
 :pp_name $2 $"pp
 :pp
+# Compile mode
+calli:STATE bz:+
+    # Defer an imm16 instruction.
+    imm8:0x95 callri:DEFERO
+    # Defer the 16-bit immediate address of the variable and perform a tail call optimization.
+    imm16:$pp_var bra:DEFERS
+# Run (or other) mode
++
+    # Add the variable address to the stack.
+    imm16:$pp_var
+    return
+++
+
+:pp_var mfill:0,1
 
 :QUIT_name $4 $"QUIT
 :QUIT
