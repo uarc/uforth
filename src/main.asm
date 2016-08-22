@@ -177,12 +177,39 @@ return
 
 :DOES_name $4 $"DOES
 :DOES
+# FIXME: Better optimized with a `bra` instead of `jmpi`.
+callri:herep reads addi:10 callri:LITERAL
+imm8:0x1C callri:DEFERO
+.DOIT bra:DEFERW
+
+:DOIT
+callri:hereb reads addi:-4 write
+return
 
 :DOES>_name $5 $"DOES>
 :DOES>
+# FIXME: Better optimized with a `bra` instead of `jmpi`.
+callri:herep reads addi:10 callri:LITERAL
+imm8:0x1C callri:DEFERO
+.DODOES bra:DEFERW
+
+:DODOES
+# Perfom the functionality of DOIT (which consumes the program address)
+callri:DOIT
+# Then also add some code to produce the data space pointer of the new word in the new word before starting it.
+callri:hereb reads addi:-3 reads bra:LITERAL
 
 :DROP_name $4 $"DROP
 :DROP
+# Compile mode
+callri:STATE bz:+
+    # Defer `drop` with a tail call optimization.
+    imm8:0xAF bra:DEFERO
+# Run (or other) mode
++
+    drop
+    return
+++
 
 :DUP_name $3 $"DUP
 :DUP
