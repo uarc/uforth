@@ -22,40 +22,10 @@ callri:STATE bz:+
 
 :'_name $1 $"'
 :'
-# Set dc0 to the back stack.
-push0 callri:hereb reads set0
 # Get the string address and length on the stack.
 callri:pp reads dup callri:BL callri:DWORD
-# Place the string length in an immediate location in the loop.
-writepri:+++
-# Iterate through every dictionary entry.
-iloop:+
-    # Check if we reached the end of the dictionary
-    get0 bnz:++
-        # If so, then return 0.
-        # Restore state.
-        drop pop0 discard
-        imm8:0 return
-    ++
-    # Duplicate this string address for next iteration
-    dup
-    # Get this string length
-    imm32 +++ pfill:0,4
-    # Lookup and get expanded string addr count combination from dictionary entry.
-    # Offset of 2 on dictionary entry.
-    rareadi0:2 callri:COUNT
-    # Compare the two strings
-    callri:STREQ bz:++
-        # Found a match, so return the xt.
-        drop read0:3
-        # Set the carry bit to 1 if this is an immediate instruction (this is for internal use).
-        imm8:-1 read0:0 add drop
-        # Restore state.
-        pop0 discard return
-    ++
-    # Need a continue here because we cannot branch to the end of the loop.
-    continue
-+
+# Call find with a tail-call optimization.
+bra:FIND
 
 :(compile)_name $9 $"(compile)
 :(compile)
@@ -235,15 +205,57 @@ return
 
 :FILL_name $4 $"FILL
 :FILL
+push0 set0
+writepri:++
+loop:+
+    imm32 ++ pfill:0,4
+    writepst0:1
++
+pop1
+return
 
 :FIND_name $4 $"FIND
 :FIND
+# Set dc0 to the back stack.
+push0 callri:hereb reads set0
+# Place the string length in an immediate location in the loop.
+writepri:+++
+# Iterate through every dictionary entry.
+iloop:+
+    # Check if we reached the end of the dictionary
+    get0 bnz:++
+        # If so, then return 0.
+        # Restore state.
+        drop pop0 discard
+        imm8:0 return
+    ++
+    # Duplicate this string address for next iteration
+    dup
+    # Get this string length
+    imm32 +++ pfill:0,4
+    # Lookup and get expanded string addr count combination from dictionary entry.
+    # Offset of 2 on dictionary entry.
+    rareadi0:2 callri:COUNT
+    # Compare the two strings
+    callri:STREQ bz:++
+        # Found a match, so return the xt.
+        drop read0:3
+        # Set the carry bit to 1 if this is an immediate instruction (this is for internal use).
+        imm8:-1 read0:0 add drop
+        # Restore state.
+        pop0 discard return
+    ++
+    # Need a continue here because we cannot branch to the end of the loop.
+    continue
++
 
 :FORGET_name $6 $"FORGET
 :FORGET
 
 :HERE_name $4 $"HERE
 :HERE
+callri:hered reads
+return
 
 :hered_name $5 $"hered
 :hered
@@ -475,7 +487,7 @@ copy1 copy1 bles:+
 push0 push1
 set1 set0
 loop:+
-    read0:1 writepre0:1
+    read0:1 writepst0:1
 +
 pop1 pop0
 return

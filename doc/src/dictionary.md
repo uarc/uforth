@@ -262,6 +262,8 @@ Word patterns are enclosed in single quotes (') and are represented using a rege
 ### `FIND`
 - dstack: `( addr n -- xt )`
 - Find the WORD with the string at `addr` with length `n` and place its execution token, or `0` if not found, on the stack.
+  - An execution token will never be `0`.
+- Also sets the carry bit to `1` if the instruction is immediate.
 
 ### `FORGET`
 - pattern: `'^ ([^ ]*)(?: |$)'`
