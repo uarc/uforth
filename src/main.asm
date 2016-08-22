@@ -374,6 +374,15 @@ return
 
 :OR_name $2 $"OR
 :OR
+# Compile mode
+calli:STATE bz:+
+    # Defer an or with a tail call optimization.
+    imm8:0xA0 bra:DEFERO
+# Run (or other) mode
++
+    or
+    return
+++
 
 :OVER_name $4 $"OVER
 :OVER
