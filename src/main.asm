@@ -347,6 +347,15 @@ return
 
 :LSHIFT_name $6 $"LSHIFT
 :LSHIFT
+# Compile mode
+calli:STATE bz:+
+    # Defer `lsl` with a tail call optimization.
+    imm8:0x5A bra:DEFERO
+# Run (or other) mode
++
+    lsl
+    return
+++
 
 :MAX_name $3 $"MAX
 :MAX
