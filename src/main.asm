@@ -2,7 +2,12 @@
 ##### Init
 #####
 
+:init_string1 $5 $"blah5
+:init_string2 $5 $"blah8
+
 :INIT
+imm8:$init_string1 callri:COUNT imm8:$init_string2 callri:COUNT rot2 callri:STREQ drop
+bra:INIT
 
 #####
 ##### Dictionary
@@ -178,6 +183,8 @@ iloop:+
 
 :COUNT_name $5 $"COUNT
 :COUNT
+dup inc rot1 reads
+return
 
 :CR_name $2 $"CR
 :CR
@@ -417,16 +424,16 @@ iloop:+
 :STREQ_name $5 $"STREQ
 :STREQ
 copy1 beq:+
-    ddrop drop imm32:0 return
+    ddrop drop imm8:0 return
 +
 push0 push1 rot2 set0 rot1 set1
 loop:+
     read0:1 read1:1 beq:++
-        pop1 pop0 discard imm32:0 return
+        pop1 pop0 discard imm8:0 return
     ++
     continue
 +
-pop1 pop0 imm32:1 return
+pop1 pop0 imm8:1 return
 
 :THEN_name $4 $"THEN
 :THEN
@@ -476,7 +483,7 @@ pop1 pop0 imm32:1 return
 # Align the segments
 palign:0x3C,2048
 # Data must be aligned such that the backstack consumes the rest of memory.
-malign:0,2048
+malign:0,2040
 
 :backstack_head
 
