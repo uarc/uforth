@@ -2,10 +2,7 @@
 ##### Init
 #####
 
-:find_token_string $1 $"'
-
 :INIT
-imm8:$find_token_string callri:COUNT imm8:$init_string2 callri:COUNT callri:STREQ drop
 bra:INIT
 
 #####
@@ -383,6 +380,22 @@ return
 
 :pa_name $2 $"pa
 :pa
+# Compile mode
+calli:STATE bz:+
+    # Defer an imm16 instruction.
+    imm8:0x95 callri:DEFERO
+    # Defer the 16-bit immediate address of the variable and perform a tail call optimization.
+    imm16:$pa_var bra:DEFERS
+# Run (or other) mode
++
+    # Add the variable address to the stack.
+    imm16:$pa_var
+    return
+++
+
+:pa_var $$pa_pad
+
+:pa_pad mfill:0,128
 
 :POSTPONE_name $8 $"POSTPONE
 :POSTPONE
