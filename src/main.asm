@@ -259,6 +259,15 @@ return
 
 :I_name $1 $"I
 :I
+# Compile mode
+calli:STATE bz:+
+    # Defer `i0` with a tail call optimization.
+    imm8:0x3C bra:DEFERO
+# Run (or other) mode
++
+    i0
+    return
+++
 
 :IDO_name $3 $"IDO
 :IDO
@@ -323,9 +332,27 @@ return
 
 :J_name $1 $"J
 :J
+# Compile mode
+calli:STATE bz:+
+    # Defer `i1` with a tail call optimization.
+    imm8:0x3D bra:DEFERO
+# Run (or other) mode
++
+    i1
+    return
+++
 
 :K_name $1 $"K
 :K
+# Compile mode
+calli:STATE bz:+
+    # Defer `i2` with a tail call optimization.
+    imm8:0x3E bra:DEFERO
+# Run (or other) mode
++
+    i2
+    return
+++
 
 :KEY_name $3 $"KEY
 :KEY
@@ -335,6 +362,15 @@ return
 
 :L_name $1 $"L
 :L
+# Compile mode
+calli:STATE bz:+
+    # Defer `i3` with a tail call optimization.
+    imm8:0x3F bra:DEFERO
+# Run (or other) mode
++
+    i3
+    return
+++
 
 :LEAVE_name $5 $"LEAVE
 :LEAVE
@@ -344,7 +380,6 @@ calli:STATE bz:+
     imm8:0x11 bra:DEFERO
 # Run (or other) mode
 +
-    # NOTE: Should this even be allowed?
     break
 ++
 
