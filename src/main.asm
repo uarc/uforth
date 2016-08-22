@@ -377,6 +377,15 @@ return
 
 :OVER_name $4 $"OVER
 :OVER
+# Compile mode
+calli:STATE bz:+
+    # Defer a rot1 with a tail call optimization.
+    imm8:0xC1 bra:DEFERO
+# Run (or other) mode
++
+    rot1
+    return
+++
 
 :pa_name $2 $"pa
 :pa
