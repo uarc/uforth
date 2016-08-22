@@ -186,6 +186,15 @@ return
 
 :DUP_name $3 $"DUP
 :DUP
+# Compile mode
+callri:STATE bz:+
+    # Defer `copy0` with a tail call optimization.
+    imm8:0xE0 bra:DEFERO
+# Run (or other) mode
++
+    copy0
+    return
+++
 
 :DWORD_name $5 $"DWORD
 :DWORD
