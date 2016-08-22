@@ -196,12 +196,39 @@ return
 
 :EXECUTE_name $7 $"EXECUTE
 :EXECUTE
+# Compile mode
+callri:STATE bz:+
+    # Defer `call` with a tail call optimization.
+    imm8:0xA3 bra:DEFERO
+# Run (or other) mode
++
+    # Do a tail call optimized call to the param.
+    jmp
+++
 
 :EXIT_name $4 $"EXIT
 :EXIT
+# Compile mode
+callri:STATE bz:+
+    # Defer `return` with a tail call optimization.
+    imm8:0x12 bra:DEFERO
+# Run (or other) mode
++
+    # TODO: Print a message warning the user that this is impossible.
+    return
+++
 
 :FALSE_name $5 $"FALSE
 :FALSE
+# Compile mode
+callri:STATE bz:+
+    # Defer `imm8:0` with a tail call optimization.
+    imm16:0x0094 bra:DEFERS
+# Run (or other) mode
++
+    imm8:0
+    return
+++
 
 :FILL_name $4 $"FILL
 :FILL
