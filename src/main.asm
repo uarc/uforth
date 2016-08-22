@@ -3,6 +3,8 @@
 #####
 
 :INIT
+# Select bus 0 for communication.
+imm8:0 seb
 bra:INIT
 
 #####
@@ -190,9 +192,28 @@ return
 
 :ELSE_name $4 $"ELSE
 :ELSE
+# Defer a branch always.
+imm8:0x1D callri:DEFERO
+# Get the herep address.
+callri:herep reads
+# Defer 16-bits to be replaced by the `THEN`.
+imm8:0 callri:DEFERS
+# Compute the branch offset.
+dup copy2 sub addi:3 rot3 write
+# At this point only the replacement address is left on the stack, so return.
+return
 
 :EMIT_name $4 $"EMIT
 :EMIT
+# Compile mode
+callri:STATE bz:+
+    # Defer `intsend` with a tail call optimization.
+    imm8:0xA9 bra:DEFERO
+# Run (or other) mode
++
+    intsend
+    return
+++
 
 :EXECUTE_name $7 $"EXECUTE
 :EXECUTE
