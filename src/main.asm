@@ -365,6 +365,15 @@ return
 
 :NIP_name $3 $"NIP
 :NIP
+# Compile mode
+calli:STATE bz:+
+    # Defer `rot1 drop` with a tail call optimization.
+    imm16:0xAFC1 bra:DEFERS
+# Run (or other) mode
++
+    rot1 drop
+    return
+++
 
 :NL_name $2 $"NL
 :NL
