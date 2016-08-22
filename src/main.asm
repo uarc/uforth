@@ -368,6 +368,15 @@ return
 
 :NL_name $2 $"NL
 :NL
+# Compile mode
+calli:STATE bz:+
+    # Defer imm8:0xA with a tail call optimization.
+    imm16:0x0A94 bra:DEFERS
+# Run (or other) mode
++
+    imm8:0xA
+    return
+++
 
 :NUMBER_name $6 $"NUMBER
 :NUMBER
