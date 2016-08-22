@@ -6,7 +6,7 @@
 :init_string2 $5 $"blah8
 
 :INIT
-imm8:$init_string1 callri:COUNT imm8:$init_string2 callri:COUNT rot2 callri:STREQ drop
+imm8:$init_string1 callri:COUNT imm8:$init_string2 callri:COUNT callri:STREQ drop
 bra:INIT
 
 #####
@@ -43,17 +43,17 @@ iloop:+
     ++
     # Duplicate this string address for next iteration
     dup
+    # Get this string length
+    imm32 +++ pfill:0,4
     # Lookup and get expanded string addr count combination from dictionary entry.
     # Offset of 2 on dictionary entry.
     rareadi0:2 callri:COUNT
-    # Get this string length
-    imm32 +++ pfill:0,4
     # Compare the two strings
     callri:STREQ bz:++
         # Found a match, so return the xt.
-        drop read0:0
+        drop read0:3
         # Set the carry bit to 1 if this is an immediate instruction (this is for internal use).
-        imm8:-1 rareadi0:3 add drop
+        imm8:-1 read0:0 add drop
         # Restore state.
         pop0 discard return
     ++
@@ -423,10 +423,10 @@ return
 
 :STREQ_name $5 $"STREQ
 :STREQ
-copy1 beq:+
+copy2 beq:+
     ddrop drop imm8:0 return
 +
-push0 push1 rot2 set0 rot1 set1
+push0 push1 set0 rot1 set1
 loop:+
     read0:1 read1:1 beq:++
         pop1 pop0 discard imm8:0 return

@@ -10,7 +10,8 @@ Word patterns are enclosed in single quotes (') and are represented using a rege
 - dstack: `( -- xt )`
 - pattern: `'^ ([^ ]*)(?: |$)'`
 - Places the execution token of the word found on the stack, if not found returns `0`.
-  - An execution token will never be 0.
+  - An execution token will never be `0`.
+- Also sets the carry bit to `1` if the instruction is immediate.
 
 ### `(compile)`
 - pattern: `'^ ([^ ]*)(?: |$)'`
@@ -581,8 +582,10 @@ Word patterns are enclosed in single quotes (') and are represented using a rege
 - Places a `1` on the stack if the system is in `(compile)` mode, `0` otherwise.
 
 ### `STREQ`
-- dstack: `( addr1 addr2 n1 n2 -- bool )`
+- dstack: `( addr1 n1 addr2 n2 -- bool )`
 - Checks if `n1 == n2` and returns `0` if they arent equal, otherwise returns `1` if the strings are equal, `0` otherwise.
+- Note: The most efficient way to implement this is with dstack: `( n1 addr1 addr2 n2 -- bool )`
+  - This would only save one instruction and, since this is a FORTH kernel, readability is more important.
 
 ### `THEN`
 - Compile:
