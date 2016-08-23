@@ -159,6 +159,15 @@ return
 
 :CREATE_name $6 $"CREATE
 :CREATE
+callri:hereb addi:-4
+# Set the word's program address.
+callri:herep reads copy1 write
+# Copy the string to hered.
+callri:BL callri:WORD copy1 addi:2 write
+# Set the word's data space address.
+callri:hered reads copy1 addi:1 write
+# Set the word's immediate to 0.
+imm8:0 copy1 addi:3 write
 
 :DECIMAL_name $7 $"DECIMAL
 :DECIMAL

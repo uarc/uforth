@@ -641,7 +641,7 @@ Word patterns are enclosed in single quotes (') and are represented using a rege
   - Places the unique address `addr` of the variable on the stack.
 
 ### `WORD`
-- dstack: `( c -- addr n )`
+- dstack: `( c -- str )`
 - pattern: `'^ ([^ ]*)(?: |$)'`
 - Takes a character delimiter and places a string from `pp` in the data space at hered, then returns it.
 
