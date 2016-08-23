@@ -922,6 +922,20 @@ blesu:+
 
 :U*_name $2 $"U*
 :U*
+# Push the accumulator.
+imm8:0
+WORD_BITS loop:+
+    # Shift the product accumulator to the left by 1.
+    lsli:1
+    copy1 andi:0x80000000 bz:++
+        copy2 add
+    ++
+    # Shift the multiplicand to the left by 1.
+    rot1 lsli:1 rot1
++
+# Remove both multiplier and multiplicand.
+rot2 rot2 ddrop
+return
 
 :UNLOOP_name $6 $"UNLOOP
 :UNLOOP
