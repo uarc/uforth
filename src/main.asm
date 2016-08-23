@@ -736,18 +736,40 @@ callri:STATE bz:+
 
 :QUIT_name $4 $"QUIT
 :QUIT
+imm8:0 dup reset
 
 :RECURSE_name $7 $"RECURSE
 :RECURSE
+callri:hereb reads addi:-4 reads bra:COMPILE,
 
 :REVEAL_name $6 $"REVEAL
 :REVEAL
+callri:hereb dup reads addi:-4 rot1 write
+return
 
 :ROT_name $3 $"ROT
 :ROT
+# Compile mode
+callri:STATE bz:+
+    # Defer `rot2` with tail-call optimization.
+    imm8:0xC2 bra:DEFERO
+# Run (or other) mode
++
+    rot2
+    return
+++
 
 :ROT:_name $4 $"ROT:
 :ROT:
+# Compile mode
+callri:STATE bz:+
+    # Defer `rot#`.
+    callri:NUMBER imm8:0xC0 add bra:DEFERO
+# Run (or other) mode
++
+    # TODO: This should display an error.
+    return
+++
 
 :RSHIFT_name $6 $"RSHIFT
 :RSHIFT
