@@ -838,6 +838,11 @@ return
 
 :STATE_name $5 $"STATE
 :STATE
+callri:shell_xt reads .(compile) bne:+
+    imm8:1 return
++
+    imm8:0 return
+++
 
 :STREQ_name $5 $"STREQ
 :STREQ
