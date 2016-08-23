@@ -156,6 +156,15 @@ return
 
 :CR_name $2 $"CR
 :CR
+# Compile mode
+callri:STATE bz:+
+    # Defer imm8:0xD with a tail call optimization.
+    imm16:0x0D94 bra:DEFERS
+# Run (or other) mode
++
+    imm8:0xD
+    return
+++
 
 :CREATE_name $6 $"CREATE
 :CREATE
@@ -168,6 +177,7 @@ callri:BL callri:WORD copy1 addi:2 write
 callri:hered reads copy1 addi:1 write
 # Set the word's immediate to 0.
 imm8:0 copy1 addi:3 write
+return
 
 :DECIMAL_name $7 $"DECIMAL
 :DECIMAL
