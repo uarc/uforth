@@ -789,6 +789,16 @@ callri:BL callri:WORD bra:LITERAL
 
 :SCAN_name $4 $"SCAN
 :SCAN
+push0 callri:pp reads set0
+loop:+
+    dup read0:1 bne:++
+        drop get0 dec pop0 discard
+        return
+    ++
+    continue
++
+drop pop0 imm8:0
+return
 
 :shell_xt_name $8 $"shell_xt
 :shell_xt

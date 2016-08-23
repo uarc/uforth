@@ -571,7 +571,8 @@ Word patterns are enclosed in single quotes (') and are represented using a rege
 
 ### `SCAN`
 - dstack: `( c n -- addr )`
-- Scans from `pp` out until the character `c` is found, checking up to `n` characters, then returning the address of c.
+- Scans from `pp` out until the character `c` is found, checking up to `n` characters, then returning the address of `c`.
+  - If nothing is found returns `0`
 
 ### `shell_xt`
 - Contains the xt which is used by `INTERPRET` for determining what to do with words.
