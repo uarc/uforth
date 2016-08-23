@@ -860,6 +860,12 @@ pop1 pop0 imm8:1 return
 
 :THEN_name $4 $"THEN
 :THEN
+# Get the herep address.
+callri:herep reads
+# Compute the branch offset.
+copy1 sub addi:1 rot1 write
+# Nothing is left on the stack.
+return
 
 :TRUE_name $4 $"TRUE
 :TRUE
