@@ -869,6 +869,15 @@ return
 
 :TRUE_name $4 $"TRUE
 :TRUE
+# Compile mode
+callri:STATE bz:+
+    # Defer `imm8:1` with a tail call optimization.
+    imm16:0x0194 bra:DEFERS
+# Run (or other) mode
++
+    imm8:1
+    return
+++
 
 :TUCK_name $4 $"TUCK
 :TUCK
