@@ -223,7 +223,7 @@ imm8:0 bra:DEFERS
 :DOES_name $4 $"DOES
 :DOES
 # FIXME: Better optimized with a `bra` instead of `jmpi`.
-callri:herep reads addi:10 callri:LITERAL
+callri:herep reads addi:10 imm8:0x96 callri:DEFERO callri:DEFERW
 imm8:0x1C callri:DEFERO
 .DOIT bra:DEFERW
 
@@ -234,7 +234,7 @@ return
 :DOES>_name $5 $"DOES>
 :DOES>
 # FIXME: Better optimized with a `bra` instead of `jmpi`.
-callri:herep reads addi:10 callri:LITERAL
+callri:herep reads addi:10 imm8:0x96 callri:DEFERO callri:DEFERW
 imm8:0x1C callri:DEFERO
 .DODOES bra:DEFERW
 
@@ -580,6 +580,7 @@ callri:STATE bz:+
 
 :LITERAL_name $7 $"LITERAL
 :LITERAL
+# TODO: Use imm8, imm16, or imm32 depending on the number.
 # Defer `imm32`.
 imm8:0x96 callri:DEFERO
 # Defer the immediate literal and perform a tail call optimization.
