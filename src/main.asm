@@ -773,6 +773,15 @@ callri:STATE bz:+
 
 :RSHIFT_name $6 $"RSHIFT
 :RSHIFT
+# Compile mode
+callri:STATE bz:+
+    # Defer `lsr`.
+    imm8:0x5B bra:DEFERO
+# Run (or other) mode
++
+    lsr
+    return
+++
 
 :S"_name $2 $"S"
 :S"
