@@ -802,12 +802,39 @@ return
 
 :shell_xt_name $8 $"shell_xt
 :shell_xt
+# Compile mode
+callri:STATE bz:+
+    # Defer an imm16 instruction.
+    imm8:0x95 callri:DEFERO
+    # Defer the 16-bit immediate address of the variable and perform a tail call optimization.
+    imm16:$shell_xt_var bra:DEFERS
+# Run (or other) mode
++
+    # Add the variable address to the stack.
+    imm16:$shell_xt_var
+    return
+++
+
+:shell_xt_var $.(run)
 
 :SPACE_name $5 $"SPACE
 :SPACE
+# Compile mode
+callri:STATE bz:+
+    # Defer imm8:0x20 with a tail call optimization.
+    imm16:0x2094 bra:DEFERS
+# Run (or other) mode
++
+    imm8:0x20
+    return
+++
 
 :SPACES_name $6 $"SPACES
 :SPACES
+loop:+
+    imm8:0x20 intsend
++
+return
 
 :STATE_name $5 $"STATE
 :STATE
@@ -874,7 +901,7 @@ pop1 pop0 imm8:1 return
 :dictionary_end
 
 # Align the segments
-palign:0x3C,2048
+palign:0xC0,2048
 # Data must be aligned such that the backstack consumes the rest of memory.
 malign:0,2040
 
