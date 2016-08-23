@@ -881,15 +881,44 @@ callri:STATE bz:+
 
 :TUCK_name $4 $"TUCK
 :TUCK
+# Compile mode
+callri:STATE bz:+
+    # Defer `rot1 copy1` with a tail call optimization.
+    imm16:0xE1C1 bra:DEFERS
+# Run (or other) mode
++
+    rot1 copy1
+    return
+++
 
 :TYPE_name $4 $"TYPE
 :TYPE
+push0 rot1 set0
+loop:+
+    read0:1 intsend
++
+pop0
+return
 
 :U._name $2 $"U.
 :U.
+# Get the digit to display and check if we need to call this again.
+callri:base reads callri:/MOD dup bz:+
+    # Since the quotient is not 0, call this again to display the more dignificant digits.
+    callri:U.
+    # Print this digit.
+    intsend
+    return
++
+drop intsend return
 
 :U<_name $2 $"U<
 :U<
+blesu:+
+    imm8:0 return
++
+    imm8:1 return
+++
 
 :U*_name $2 $"U*
 :U*
