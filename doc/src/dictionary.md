@@ -566,8 +566,8 @@ Word patterns are enclosed in single quotes (') and are represented using a rege
 - Compile:
   - pattern: `'^ ([^ ]*)"'`
 - Run:
-  - dstack: `( -- addr n )`
-  - Puts the address `addr` and the number of characters `n` of the string specified at compile-time onto the stack.
+  - dstack: `( -- str )`
+  - Puts the string address `str` of the string specified at compile-time onto the stack.
 
 ### `SCAN`
 - dstack: `( c n -- addr )`
