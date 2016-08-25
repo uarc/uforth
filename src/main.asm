@@ -939,6 +939,15 @@ return
 
 :UNLOOP_name $6 $"UNLOOP
 :UNLOOP
+# Compile mode
+callri:STATE bz:+
+    # Defer `discard` with a tail call optimization.
+    imm8:0x1E bra:DEFERO
+# Run (or other) mode
++
+    discard
+    return
+++
 
 :VARIABLE_name $8 $"VARIABLE
 :VARIABLE
