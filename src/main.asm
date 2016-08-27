@@ -1071,6 +1071,15 @@ callri:STATE bz:+
 
 :VARIABLE_name $8 $"VARIABLE
 :VARIABLE
+# Create the word.
+callri:CREATE
+# Allot space for the variable.
+imm8:0 callri:ALLOT
+# FIXME: Change the word to produce an immediate word which handles the run vs compile mode cases without a call.
+# Defer the instructions to produce the address.
+imm8:0x96 callri:DEFERO callri:hered reads callri:DEFERW
+# Reveal the word in the dictionary with a tail call optimization.
+bra:REVEAL
 
 :WORD_name $4 $"WORD
 :WORD
