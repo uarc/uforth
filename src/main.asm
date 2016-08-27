@@ -551,9 +551,16 @@ callri:STATE bz:+
 
 :KEY_name $3 $"KEY
 :KEY
+intrecv cv1
+return
 
 :KEY?_name $4 $"KEY?
 :KEY?
+imm8:0 bna:+
+    imm8:1 return
++
+    imm8:0 return
+++
 
 :L_name $1 $"L
 :L
