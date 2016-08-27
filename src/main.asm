@@ -1117,6 +1117,15 @@ iloop:+
 
 :XOR_name $3 $"XOR
 :XOR
+# Compile mode
+callri:STATE bz:+
+    # Defer `xor` with tail-call optimization.
+    imm8:0xA1 bra:DEFERO
+# Run (or other) mode
++
+    xor
+    return
+++
 
 :XT>NAME_name $7 $"XT>NAME
 :XT>NAME
