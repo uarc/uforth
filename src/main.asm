@@ -1083,6 +1083,26 @@ bra:REVEAL
 
 :WORD_name $4 $"WORD
 :WORD
+# Word cap at 64 (change this number to alter this)
+callri:BL imm8:64 callri:SCAN dup bnz:+
+    # In this case, the delimiter was not found.
+    # TODO: Print errors.
+    bra:QUIT
++
+# Find the length of the string.
+callri:pp reads sub
+# Write the length of the string to data space.
+dup callri:hered reads write
+# Get the string source address again.
+callri:pp reads
+# The string is now in `n addr` format, so copy it to (hered + 1) after the number word.
+callri:hered reads inc callri:MOVE
+# Get original hered and also increment hered to the new length, including an increment for the number.
+callri:hered reads dup rot2 add inc
+# Write back the incremented hered.
+callri:hered write
+# The old hered is left on the stack and is the location the string begins.
+return
 
 :WORDS_name $5 $"WORDS
 :WORDS
