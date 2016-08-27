@@ -26,6 +26,8 @@ callri:STATE bz:+
 :'
 # Get the string address and length on the stack.
 callri:pp reads dup callri:BL callri:DWORD
+# Update pp variable now that the word has been parsed to move it to the next word.
+dup inc copy2 add callri:pp write
 # Call find with a tail-call optimization.
 bra:FIND
 
