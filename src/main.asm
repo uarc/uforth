@@ -622,6 +622,8 @@ imm8:0 bra:DEFERS
 
 :IMMEDIATE_name $9 $"IMMEDIATE
 :IMMEDIATE
+imm8:1 callri:hereb reads addi:3 write
+return
 
 :INTERPRET_name $9 $"INTERPRET
 :INTERPRET
