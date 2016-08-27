@@ -537,6 +537,7 @@ Word patterns are enclosed in single quotes (') and are represented using a rege
 ### `POSTPONE`
 - Compile-time pattern: `'^ ([^ ]*)(?: |$)'`
 - Append the compilation semantics of the word to the current word's defintion.
+- If the word is not found it will abort.
 
 ### `pp`
 - dstack: `( -- addr )`
