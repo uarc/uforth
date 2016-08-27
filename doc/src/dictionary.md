@@ -654,7 +654,7 @@ Word patterns are enclosed in single quotes (') and are represented using a rege
 - dstack: `( a b -- a^b )`
 
 ### `XT>NAME`
-- dstack: `( xt -- addr n )`
+- dstack: `( xt -- str )`
 - Consumes an execution token and produces the address to the name of the xt.
 
 ### `[`

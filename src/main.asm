@@ -1129,6 +1129,8 @@ callri:STATE bz:+
 
 :XT>NAME_name $7 $"XT>NAME
 :XT>NAME
+addi:2 reads
+return
 
 :[_name $1 $"[
 :[
