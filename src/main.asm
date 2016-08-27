@@ -830,6 +830,11 @@ callri:STATE bz:+
 
 :POSTPONE_name $8 $"POSTPONE
 :POSTPONE
+callri:' bnz:+
+    # TODO: Add some sort of error message.
+    bra:QUIT
++
+bra:COMPILE,
 
 :pp_name $2 $"pp
 :pp
