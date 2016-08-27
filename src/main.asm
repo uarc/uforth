@@ -468,58 +468,157 @@ callri:STATE bz:+
 
 :IDO_name $3 $"IDO
 :IDO
+imm8:0x16 callri:DEFERO
+callri:herep reads
+imm8:0 bra:DEFERS
 
 :IF_name $2 $"IF
 # IF is in the same location as IFZ!, look further down for its tag
 
 :IF=_name $3 $"IF=
 :IF=
+# Defer a `bne`
+imm8:0x6D callri:DEFERO
+# Get the address for `ELSE` or `THEN` to replace.
+callri:herep reads
+# Defer 16-bits to be replaced by the `ELSE` or `THEN`.
+imm8:0 bra:DEFERS
 
 :IF!=_name $4 $"IF!=
 :IF!=
+# Defer a `beq`
+imm8:0x6C callri:DEFERO
+# Get the address for `ELSE` or `THEN` to replace.
+callri:herep reads
+# Defer 16-bits to be replaced by the `ELSE` or `THEN`.
+imm8:0 bra:DEFERS
 
 :IF>_name $3 $"IF>
 :IF>
+# Defer a `bleq`
+imm8:0x6F callri:DEFERO
+# Get the address for `ELSE` or `THEN` to replace.
+callri:herep reads
+# Defer 16-bits to be replaced by the `ELSE` or `THEN`.
+imm8:0 bra:DEFERS
 
 :IF>=_name $4 $"IF>=
 :IF>=
+# Defer a `bles`
+imm8:0x6E callri:DEFERO
+# Get the address for `ELSE` or `THEN` to replace.
+callri:herep reads
+# Defer 16-bits to be replaced by the `ELSE` or `THEN`.
+imm8:0 bra:DEFERS
 
 :IF>U_name $4 $"IF>U
 :IF>U
+# Defer a `blequ`
+imm8:0x71 callri:DEFERO
+# Get the address for `ELSE` or `THEN` to replace.
+callri:herep reads
+# Defer 16-bits to be replaced by the `ELSE` or `THEN`.
+imm8:0 bra:DEFERS
 
 :IF>=U_name $5 $"IF>=U
 :IF>=U
+# Defer a `blesu`
+imm8:0x70 callri:DEFERO
+# Get the address for `ELSE` or `THEN` to replace.
+callri:herep reads
+# Defer 16-bits to be replaced by the `ELSE` or `THEN`.
+imm8:0 bra:DEFERS
 
 :IFC_name $3 $"IFC
 :IFC
+# Defer a `bnc`
+imm8:0x8B callri:DEFERO
+# Get the address for `ELSE` or `THEN` to replace.
+callri:herep reads
+# Defer 16-bits to be replaced by the `ELSE` or `THEN`.
+imm8:0 bra:DEFERS
 
 :IFC!_name $4 $"IFC!
 :IFC!
+# Defer a `bc`
+imm8:0x8A callri:DEFERO
+# Get the address for `ELSE` or `THEN` to replace.
+callri:herep reads
+# Defer 16-bits to be replaced by the `ELSE` or `THEN`.
+imm8:0 bra:DEFERS
 
 :IFO_name $3 $"IFO
 :IFO
+# Defer a `bno`
+imm8:0x8D callri:DEFERO
+# Get the address for `ELSE` or `THEN` to replace.
+callri:herep reads
+# Defer 16-bits to be replaced by the `ELSE` or `THEN`.
+imm8:0 bra:DEFERS
 
 :IFO!_name $4 $"IFO!
 :IFO!
+# Defer a `bo`
+imm8:0x8C callri:DEFERO
+# Get the address for `ELSE` or `THEN` to replace.
+callri:herep reads
+# Defer 16-bits to be replaced by the `ELSE` or `THEN`.
+imm8:0 bra:DEFERS
 
 :IFI_name $3 $"IFI
 :IFI
+# Defer a `bni`
+imm8:0x8F callri:DEFERO
+# Get the address for `ELSE` or `THEN` to replace.
+callri:herep reads
+# Defer 16-bits to be replaced by the `ELSE` or `THEN`.
+imm8:0 bra:DEFERS
 
 :IFI!_name $4 $"IFI!
 :IFI!
+# Defer a `bi`
+imm8:0x8E callri:DEFERO
+# Get the address for `ELSE` or `THEN` to replace.
+callri:herep reads
+# Defer 16-bits to be replaced by the `ELSE` or `THEN`.
+imm8:0 bra:DEFERS
 
 :IFZ_name $3 $"IFZ
 :IFZ
+# Defer a `bnz`
+imm8:0xAC callri:DEFERO
+# Get the address for `ELSE` or `THEN` to replace.
+callri:herep reads
+# Defer 16-bits to be replaced by the `ELSE` or `THEN`.
+imm8:0 bra:DEFERS
 
 :IFZ!_name $4 $"IFZ!
 # This is also the tag for IF
 :IFZ! :IF
+# Defer a `bz`
+imm8:0xAB callri:DEFERO
+# Get the address for `ELSE` or `THEN` to replace.
+callri:herep reads
+# Defer 16-bits to be replaced by the `ELSE` or `THEN`.
+imm8:0 bra:DEFERS
 
 :IFA_name $3 $"IFA
 :IFA
+# Defer a `bna`
+imm8:0xB9 callri:DEFERO
+# Get the address for `ELSE` or `THEN` to replace.
+callri:herep reads
+# Defer 16-bits to be replaced by the `ELSE` or `THEN`.
+imm8:0 bra:DEFERS
 
 :IFA!_name $4 $"IFA!
 :IFA!
+# Defer a `ba`
+imm8:0xB8 callri:DEFERO
+# Get the address for `ELSE` or `THEN` to replace.
+callri:herep reads
+# Defer 16-bits to be replaced by the `ELSE` or `THEN`.
+imm8:0 bra:DEFERS
 
 :IMMEDIATE_name $9 $"IMMEDIATE
 :IMMEDIATE
