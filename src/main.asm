@@ -1134,9 +1134,11 @@ return
 
 :[_name $1 $"[
 :[
+.(run) callri:shell_xt write
 
 :]_name $1 $"]
-:
+:]
+.(compile) callri:shell_xt write
 
 :dictionary_end
 
