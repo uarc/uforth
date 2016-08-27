@@ -627,6 +627,14 @@ return
 
 :INTERPRET_name $9 $"INTERPRET
 :INTERPRET
+iloop:+
+    callri:pp reads reads callri:BL beq:++
+        callri:shell_xt reads call
+        continue
+    ++
+        break
++
+return
 
 :J_name $1 $"J
 :J
@@ -846,6 +854,8 @@ callri:STATE bz:+
 
 :QUIT_name $4 $"QUIT
 :QUIT
+# Emit a newline before restarting.
+callri:NL callri:EMIT
 imm8:0 dup reset
 
 :RECURSE_name $7 $"RECURSE
