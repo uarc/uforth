@@ -280,7 +280,6 @@ iloop:+
     read0:1 imm32 ++ pfill:0,4 beq:+++
         i0 pop0 discard return
     +++
-    continue
 +
 
 :ELSE_name $4 $"ELSE
@@ -386,8 +385,6 @@ iloop:+
         # Restore state.
         pop0 discard return
     ++
-    # Need a continue here because we cannot branch to the end of the loop.
-    continue
 +
 
 :FORGET_name $6 $"FORGET
@@ -628,11 +625,10 @@ return
 :INTERPRET_name $9 $"INTERPRET
 :INTERPRET
 iloop:+
-    callri:pp reads reads callri:BL beq:++
-        callri:shell_xt reads call
-        continue
-    ++
+    callri:pp reads reads callri:BL bne:++
         break
+    ++
+    callri:shell_xt reads call
 +
 return
 
@@ -915,7 +911,6 @@ loop:+
         drop get0 dec pop0 discard
         return
     ++
-    continue
 +
 drop pop0 imm8:0
 return
@@ -974,7 +969,6 @@ loop:+
     read0:1 read1:1 beq:++
         pop1 pop0 discard imm8:0 return
     ++
-    continue
 +
 pop1 pop0 imm8:1 return
 
