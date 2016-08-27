@@ -1106,6 +1106,20 @@ return
 
 :WORDS_name $5 $"WORDS
 :WORDS
+# Set dc0 to the back stack.
+push0 callri:hereb reads set0
+# Iterate through every dictionary entry.
+iloop:+
+    # Check if we reached the end of the dictionary
+    get0 bnz:++
+        pop0 discard
+        return
+    ++
+    # Read the entry with an offset of 2 to get the name address and display it.
+    rareadi0:2 callri:COUNT callri:TYPE
+    # Send a space to the terminal.
+    callri:BL intsend
++
 
 :XOR_name $3 $"XOR
 :XOR
