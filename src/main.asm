@@ -109,11 +109,13 @@ bra:FIND
 :@_name $1 $"@
 :@
 
+# Uses the same xt as `QUIT`.
 :ABORT_name $5 $"ABORT
-:ABORT
 
 :ABORT"_name $6 $"ABORT"
 :ABORT"
+# Immedate word so append the semantics of ABORT" rather than performing it.
+callri:." imm16:.QUIT bra:COMPILE,
 
 :ABS_name $3 $"ABS
 :ABS
