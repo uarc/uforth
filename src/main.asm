@@ -154,7 +154,7 @@ callri:CREATE
 # Defer `imm32:val`.
 imm8:0x96 callri:DEFERO callri:DEFERW
 # Defer `callri:DOCON` with a tail call optimization.
-imm32:.DOCON bra:COMPILE,
+imm16:.DOCON bra:COMPILE,
 
 :DOCON
 # Compile mode
@@ -268,10 +268,9 @@ imm8:0 bra:DEFERS
 
 :DOES_name $4 $"DOES
 :DOES
-# FIXME: Better optimized with a `bra` instead of `jmpi`.
-callri:herep reads addi:10 imm8:0x96 callri:DEFERO callri:DEFERW
-imm8:0x1C callri:DEFERO
-.DOIT bra:DEFERW
+callri:herep reads addi:6 imm8:0x95 callri:DEFERO callri:DEFERS
+imm8:0x1D callri:DEFERO
+imm16:.DOIT callri:herep reads sub bra:DEFERS
 
 :DOIT
 callri:hereb reads addi:-4 write
@@ -279,10 +278,9 @@ return
 
 :DOES>_name $5 $"DOES>
 :DOES>
-# FIXME: Better optimized with a `bra` instead of `jmpi`.
-callri:herep reads addi:10 imm8:0x96 callri:DEFERO callri:DEFERW
-imm8:0x1C callri:DEFERO
-.DODOES bra:DEFERW
+callri:herep reads addi:6 imm8:0x95 callri:DEFERO callri:DEFERS
+imm8:0x1D callri:DEFERO
+imm16:.DODOES callri:herep reads sub bra:DEFERS
 
 :DODOES
 # Perfom the functionality of DOIT (which consumes the program address)
