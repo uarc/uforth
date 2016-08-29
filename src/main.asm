@@ -123,6 +123,8 @@ bra:FIND
 
 :ALLOT_name $5 $"ALLOT
 :ALLOT
+callri:hered reads add callri:hered write
+return
 
 :AND_name $3 $"AND
 :AND
