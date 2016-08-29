@@ -39,6 +39,27 @@ bra:FIND
 
 :*_name $1 $"*
 :*
+dup imm8:0 bles:+
+    # First number is positive.
+    rot1 dup imm8:0 bles:++
+        # Second number is positive.
+        bra:U*
+    ++
+        # Second number is negative.
+        subi:0
+        callri:U* subi:0
+        return
++
+    # Top number is negative.
+    subi:0
+    rot1 dup imm8:0 bles:++
+        # Second number is positive.
+        callri:U* subi:0
+        return
+    ++
+        # Second number is negative.
+        subi:0
+        bra:U*
 
 :*/_name $2 $"*/
 :*/
