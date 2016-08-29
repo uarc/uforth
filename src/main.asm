@@ -702,6 +702,9 @@ bra:DEFERW
 
 :LOOP_name $4 $"LOOP
 :LOOP
+# Replace the offset pointed to by top of stack with (herep - 3 - location).
+calli:herep reads addi:-3 copy1 sub rot1 write
+return
 
 :LSHIFT_name $6 $"LSHIFT
 :LSHIFT
@@ -735,6 +738,8 @@ copy1 copy1 bles:+
 
 :MOD_name $3 $"MOD
 :MOD
+callri:/MOD drop
+return
 
 :MOVE_name $4 $"MOVE
 :MOVE
@@ -784,6 +789,53 @@ callri:STATE bz:+
 
 :NUMBER_name $6 $"NUMBER
 :NUMBER
+push0 callri:pp reads set0
+# Check for negative and put a `1` on the stack if there is a negative sign and `0` otherwise.
+read0:0 imm8:45 bne:+
+    imm8:1
+    # Advance DC0 to the first digit after the negative sign.
+    move0:1
+    bra:++
++
+    imm8:0
+++
+# Add accumulator to stack.
+imm8:0
+iloop:+
+    read0:1 dup callri:BL bne:++
+        # Set the new pp after the number.
+        get0 callri:pp write
+        break
+    ++
+    imm8:47 copy1 bles:++
+        dup imm8:57 bleq:+++
+            # This is in the range '0' - '9'.
+            addi:-48 rot1 callri:base reads callri:*
+            continue
+        +++
+    ++
+    imm8:64 copy1 bles:++
+        dup imm8:90 bleq:+++
+            # This is in the range 'A' - 'Z'.
+            addi:-65 rot1 callri:base reads callri:*
+            continue
+        +++
+    ++
+    imm8:96 copy1 bles:++
+        dup imm8:122 bleq:+++
+            # This is in the range 'a' - 'z'.
+            addi:-97 rot1 callri:base reads callri:*
+            continue
+        +++
+    ++
+    # TODO: Print an error message.
+    bra:QUIT
++
+rot1 bnz:+
+    # Negate number due to negative sign.
+    subi:0
++
+pop0 return
 
 :OR_name $2 $"OR
 :OR
@@ -913,7 +965,10 @@ callri:BL callri:WORD bra:LITERAL
 push0 callri:pp reads set0
 loop:+
     dup read0:1 bne:++
-        drop get0 dec pop0 discard
+        drop
+        # Decrement is here because DC0 goes one beyond the delimiter.
+        get0 dec
+        pop0 discard
         return
     ++
 +
