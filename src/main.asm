@@ -99,6 +99,13 @@ bra:FIND
 
 :=_name $1 $"=
 :=
+beq:+
+    imm8:0
+    return
++
+    imm8:1
+    return
+++
 
 :>_name $1 $">
 :>
