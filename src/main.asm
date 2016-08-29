@@ -138,6 +138,15 @@ bra:FIND
 
 :BS_name $2 $"BS
 :BS
+# Compile mode
+callri:STATE bz:+
+    # Defer imm8:0x08 with a tail call optimization.
+    imm16:0x0894 bra:DEFERS
+# Run (or other) mode
++
+    imm8:0x08
+    return
+++
 
 :COMPILE,_name $8 $"COMPILE,
 :COMPILE,
