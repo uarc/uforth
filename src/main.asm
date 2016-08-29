@@ -936,8 +936,12 @@ callri:STATE bz:+
 :ROT:
 # Compile mode
 callri:STATE bz:+
+    # Temporarily enter run mode.
+    callri:[
     # Defer `rot#`.
-    callri:NUMBER imm8:0xC0 add bra:DEFERO
+    callri:NUMBER imm8:0xC0 add callri:DEFERO
+    # Return to compile move with tail call optimization.
+    bra:]
 # Run (or other) mode
 +
     callri:NUMBER imm8:0xC0 add writepori:+++
