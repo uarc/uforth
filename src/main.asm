@@ -63,9 +63,19 @@ bra:FIND
 
 :."_name $2 $"."
 :."
+# Get the string into the data space and get the address.
+imm8:0x22 callri:WORD
+# Defer the loading of the address at runtime.
+callri:LITERAL
+# Defer `COUNT`.
+imm16:.COUNT callri:COMPILE,
+# Defer `TYPE`.
+imm16:.TYPE bra:COMPILE,
 
 :/_name $1 $"/
 :/
+callri:/MOD drop
+return
 
 :/MOD_name $4 $"/MOD
 :/MOD
