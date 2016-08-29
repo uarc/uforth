@@ -69,6 +69,30 @@ bra:FIND
 
 :/MOD_name $4 $"/MOD
 :/MOD
+dup bnz:+
+    # TODO: Add error message for divide by zero.
+    bra:QUIT
++
+# Add quotient then remainder to stack.
+imm8:0 dup
+WORD_BITS loop:+
+    # Shift remainder to left by 1.
+    lsli:1
+    # Circular shift left a copy of the numerator by i + 1.
+    copy3 i inc csl
+    # Or the lowest bit into the remainder.
+    andi:1 or
+    # Check if the remainder is greater than or equal to the divisor.
+    copy2 bles:++
+        # It was greater or equal, so subtract it from the remainder.
+        copy2 sub
+        # Add a one at bit position i in the quotient.
+        rot1 imm0:1 i lsl or rot1
+    ++
++
+# Get rid of the numerator and the divisor.
+rot3 rot3 ddrop
+return
 
 :0<_name $2 $"0<
 :0<
