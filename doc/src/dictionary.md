@@ -143,7 +143,7 @@ Word patterns are enclosed in single quotes (') and are represented using a rege
 
 ### `BODY`
 - dstack: `( -- addr )`
-- Retrieves the address of the data space of the most recent word.
+- Retrieves the address of the data space of the most recently completed word.
 
 ### `BS`
 - dstack: `( -- '\b' )`
