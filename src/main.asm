@@ -54,6 +54,7 @@ bra:FIND
 
 :,_name $1 $",
 :,
+callri:hered reads write callri:hered reads inc callri:hered write
 
 :-_name $1 $"-
 :-
