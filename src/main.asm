@@ -378,17 +378,60 @@ iloop:+
     rareadi0:2 callri:COUNT
     # Compare the two strings
     callri:STREQ bz:++
-        # Found a match, so return the xt.
+        # Found a match, so drop the address and return the xt.
         drop read0:3
         # Set the carry bit to 1 if this is an immediate instruction (this is for internal use).
         imm8:-1 read0:0 add drop
         # Restore state.
         pop0 discard return
     ++
+    # Move to the next entry.
+    move0:4
 +
 
 :FORGET_name $6 $"FORGET
 :FORGET
+# Set dc0 to the back stack.
+push0 callri:hereb reads set0
+# Get the end of the word.
+callri:BL imm8:32 callri:SCAN
+# Get the processing position, read the old address to conveyor, and write the next address to it.
+dup inc callri:pp dup read write
+# Duplicate the address, get the old address from the conveyor, and calculate the string length.
+dup cv0 sub
+# Place the string length in an immediate location in the loop.
+writepori:+++
+# Iterate through every dictionary entry.
+iloop:+
+    # Check if we reached the end of the dictionary
+    get0 bnz:++
+        # Restore state.
+        drop pop0 discard
+        return
+    ++
+    # Duplicate this string address for next iteration
+    dup
+    # Get this string length
+    imm8 +++ pfill:0,1
+    # Lookup and get expanded string addr count combination from dictionary entry.
+    # Offset of 2 on dictionary entry.
+    rareadi0:2 callri:COUNT
+    # Compare the two strings
+    callri:STREQ bz:++
+        # Found a match, so drop the address.
+        drop
+        # Retrieve the program address from the token and set herep.
+        rareadi0:0 callri:herep write
+        # Retrieve the string address and set hered to it.
+        rareadi0:2 callri:hered write
+        # Get the address, add 4 to it, and set hereb.
+        get0 addi:4 callri:hereb write
+        # Restore state.
+        pop0 discard return
+    ++
+    # Move to the next entry.
+    move0:4
++
 
 :HERE_name $4 $"HERE
 :HERE
