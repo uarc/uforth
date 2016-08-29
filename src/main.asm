@@ -48,6 +48,15 @@ bra:FIND
 
 :+_name $1 $"+
 :PLUS
+# Compile mode
+callri:STATE bz:+
+    # Defer a `add` with a tail call optimization.
+    imm8:0x58 bra:DEFERO
+# Run (or other) mode
++
+    add
+    return
+++
 
 :+!_name $2 $"+!
 :+!
@@ -60,7 +69,7 @@ callri:hered reads write callri:hered reads inc callri:hered write
 return
 
 :-_name $1 $"-
-:-
+:MINUS
 # Compile mode
 callri:STATE bz:+
     # Defer a `sub` with a tail call optimization.
