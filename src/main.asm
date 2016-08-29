@@ -108,6 +108,15 @@ bra:FIND
 
 :@_name $1 $"@
 :@
+# Compile mode
+callri:STATE bz:+
+    # Defer an `read cv0` with a tail call optimization.
+    imm16:0x20A2 bra:DEFERS
+# Run (or other) mode
++
+    reads
+    return
+++
 
 # Uses the same xt as `QUIT`.
 :ABORT_name $5 $"ABORT
