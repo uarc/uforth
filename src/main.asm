@@ -103,9 +103,6 @@ bra:FIND
 :>_name $1 $">
 :>
 
-:>BODY_name $5 $">BODY
-:>BODY
-
 :@_name $1 $"@
 :@
 # Compile mode

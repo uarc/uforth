@@ -102,10 +102,6 @@ Word patterns are enclosed in single quotes (') and are represented using a rege
 - dstack: `( a b -- bool )`
 - Puts a `1` on the stack if `a` is greater than `b`, `0` otherwise.
 
-### `>BODY`
-- dstack: `( xt -- addr )`
-- Places the data-space address of execution token `xt` on the stack.
-
 ### `@`
 - dstack: `( addr -- w )`
 - Reads `w` from the address `addr`.
