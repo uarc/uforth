@@ -42,6 +42,7 @@ bra:FIND
 
 :*/_name $2 $"*/
 :*/
+callri:* bra:/
 
 :*/MOD_name $5 $"*/MOD
 :*/MOD
