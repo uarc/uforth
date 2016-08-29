@@ -117,6 +117,12 @@ bra:FIND
 
 :ABS_name $3 $"ABS
 :ABS
+imm8:0 bles:+
+    return
++
+    subi:0
+    return
+++
 
 :ACCEPT_name $6 $"ACCEPT
 :ACCEPT
