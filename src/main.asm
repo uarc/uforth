@@ -87,6 +87,15 @@ bra:FIND
 
 :2/_name $2 $"2/
 :2/
+# Compile mode
+callri:STATE bz:+
+    # Defer an `asri:1` with a tail call optimization.
+    imm16:0x0186 bra:DEFERS
+# Run (or other) mode
++
+    asri:1
+    return
+++
 
 ::_name $1 $":
 ::
