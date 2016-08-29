@@ -132,6 +132,15 @@ bra:FIND
 
 :BL_name $2 $"BL
 :BL
+# Compile mode
+callri:STATE bz:+
+    # Defer imm8:0x20 with a tail call optimization.
+    imm16:0x2094 bra:DEFERS
+# Run (or other) mode
++
+    imm8:0x20
+    return
+++
 
 :BODY_name $4 $"BODY
 :BODY
@@ -1098,11 +1107,11 @@ callri:STATE bz:+
 :SPACE
 # Compile mode
 callri:STATE bz:+
-    # Defer imm8:0x20 with a tail call optimization.
-    imm16:0x2094 bra:DEFERS
+    # Defer `imm8:0x20 intsend` with a tail call optimization.
+    imm16:0x2094 callri:DEFERS imm8:0xA9 bra:DEFERO
 # Run (or other) mode
 +
-    imm8:0x20
+    imm8:0x20 intsend
     return
 ++
 
