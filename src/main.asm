@@ -96,6 +96,23 @@ bra:FIND
 
 :<_name $1 $"<
 :<
+bles:+
+    imm8:0
+    return
++
+    imm8:1
+    return
+++
+
+:<=_name $2 $"<=
+:<=
+bleq:+
+    imm8:0
+    return
++
+    imm8:1
+    return
+++
 
 :=_name $1 $"=
 :=
@@ -110,6 +127,16 @@ beq:+
 :>_name $1 $">
 :>
 bleq:+
+    imm8:1
+    return
++
+    imm8:0
+    return
+++
+
+:>=_name $2 $">=
+:>=
+bles:+
     imm8:1
     return
 +

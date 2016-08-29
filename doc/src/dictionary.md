@@ -94,6 +94,10 @@ Word patterns are enclosed in single quotes (') and are represented using a rege
 - dstack: `( a b -- bool )`
 - Puts a `1` on the stack if `a` is less than `b`, `0` otherwise.
 
+### `<=`
+- dstack: `( a b -- bool )`
+- Puts a `1` on the stack if `a` is less than or equal to `b`, `0` otherwise.
+
 ### `=`
 - dstack: `( a b -- bool )`
 - Puts a `1` on the stack if `a` and `b` are equal, `0` otherwise.
@@ -101,6 +105,10 @@ Word patterns are enclosed in single quotes (') and are represented using a rege
 ### `>`
 - dstack: `( a b -- bool )`
 - Puts a `1` on the stack if `a` is greater than `b`, `0` otherwise.
+
+### `>`
+- dstack: `( a b -- bool )`
+- Puts a `1` on the stack if `a` is greater than or equal to `b`, `0` otherwise.
 
 ### `@`
 - dstack: `( addr -- w )`
