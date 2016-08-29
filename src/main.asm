@@ -90,9 +90,18 @@ bra:FIND
 
 ::_name $1 $":
 ::
+callri:CREATE
+# Enter compilation mode.
+bra:]
 
 :;_name $1 $";
 :;
+# While in compile mode, call EXIT.
+callri:EXIT
+# Enter run mode.
+callri:[
+# Reveal the word in the dictionary with a tail call optimization.
+bra:REVEAL
 
 :<_name $1 $"<
 :<
@@ -1325,8 +1334,8 @@ callri:STATE bz:+
 # Create the word.
 callri:CREATE
 # Allot space for the variable.
-imm8:0 callri:ALLOT
-# FIXME: Change the word to produce an immediate word which handles the run vs compile mode cases without a call.
+imm8:1 callri:ALLOT
+# TODO: Add a DOVAR to inline the address for efficiency.
 # Defer the instructions to produce the address.
 imm8:0x96 callri:DEFERO callri:hered reads callri:DEFERW
 # Reveal the word in the dictionary with a tail call optimization.
