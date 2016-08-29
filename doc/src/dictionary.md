@@ -123,7 +123,7 @@ Word patterns are enclosed in single quotes (') and are represented using a rege
 - Computes the absolute value of `a`.
 
 ### `ACCEPT`
-- dstack: `( addr1 n -- addr2 )`
+- dstack: `( n addr1 -- addr2 )`
 - Writes characters from the input up to `n` characters at address `addr1`, `addr2` is the address following the last character written.
 
 ### `ALLOT`

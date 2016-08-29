@@ -120,6 +120,12 @@ bra:FIND
 
 :ACCEPT_name $6 $"ACCEPT
 :ACCEPT
+push0 set0
+loop:+
+    intrecv cv1 writepst0:1
++
+get0 pop0
+return
 
 :ALLOT_name $5 $"ALLOT
 :ALLOT
