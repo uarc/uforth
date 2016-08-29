@@ -141,15 +141,20 @@ bra:FIND
 
 :COMPILE,_name $8 $"COMPILE,
 :COMPILE,
+# Compute the PC 16-bit relative offset between the execution token and herep.
+callri:herep reads sub
+# Defer `callri`.
+imm8:0x1F callri:DEFERO
+# Defer the immediate parameter to `callri` with a tail call optimization.
+bra:DEFERS
 
 :CONSTATNT_name $9 $"CONSTATNT
 :CONSTATNT
 callri:CREATE
 # Defer `imm32:val`.
 imm8:0x96 callri:DEFERO callri:DEFERW
-# TODO: Optimize this by exchanging `calli` with `callri`.
-# Defer `calli:DOCON` with a tail call optimization.
-imm8:0x1B callri:DEFERO imm32:.DOCON bra:DEFERW
+# Defer `callri:DOCON` with a tail call optimization.
+imm32:.DOCON bra:COMPILE,
 
 :DOCON
 # Compile mode
