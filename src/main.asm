@@ -84,6 +84,15 @@ bra:FIND
 
 :2*_name $2 $"2*
 :2*
+# Compile mode
+callri:STATE bz:+
+    # Defer an `lsli:1` with a tail call optimization.
+    imm16:0x0184 bra:DEFERS
+# Run (or other) mode
++
+    lsli:1
+    return
+++
 
 :2/_name $2 $"2/
 :2/
