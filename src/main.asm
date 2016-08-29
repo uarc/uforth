@@ -56,10 +56,16 @@ bra:FIND
 :,
 
 :-_name $1 $"-
-:MINUS
+:-
 
 :._name $1 $".
 :.
+imm8:0 bles:+
+    bra:U.
++
+    # It was less than 0 so print a negative sign.
+    imm8:45 intsend
+    subi:0 bra:U.
 
 :."_name $2 $"."
 :."
@@ -74,7 +80,7 @@ imm16:.TYPE bra:COMPILE,
 
 :/_name $1 $"/
 :/
-callri:/MOD drop
+callri:/MOD rot1 drop
 return
 
 :/MOD_name $4 $"/MOD
@@ -102,6 +108,8 @@ WORD_BITS loop:+
 +
 # Get rid of the numerator and the divisor.
 rot3 rot3 ddrop
+# Swap remainder and quotient.
+rot1
 return
 
 :0<_name $2 $"0<
@@ -458,6 +466,21 @@ copy0 reads rot2 copy1 writep
 # Advance the program pointer by 4 (the amount of octets in a processor word) and write back the new head.
 addi:4 rot1 write
 return
+
+:DIGIT_name $5 $"DIGIT
+:DIGIT
+dup imm8:10 bles:+
+    dup imm8:36 bles:++
+        # It is way too big (over base 36).
+        # TODO: Add error message for too big.
+        bra:QUIT
+    ++
+    addi:65 intsend
+    return
++
+    # It was less than 10.
+    addi:48 intsend
+    return
 
 :DO_name $2 $"DO
 :DO
@@ -1368,13 +1391,12 @@ return
 :U.
 # Get the digit to display and check if we need to call this again.
 callri:base reads callri:/MOD dup bz:+
-    # Since the quotient is not 0, call this again to display the more dignificant digits.
+    # Since the quotient is not 0, call this again to display the more significant digits.
     callri:U.
-    # Print this digit.
-    intsend
-    return
+    # Print this digit with a tail call optimization.
+    bra:DIGIT
 +
-drop intsend return
+drop bra:DIGIT
 
 :U<_name $2 $"U<
 :U<

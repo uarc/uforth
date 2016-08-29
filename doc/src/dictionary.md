@@ -201,6 +201,10 @@ Word patterns are enclosed in single quotes (') and are represented using a rege
 - dstack: `( w -- )`
 - Adds a processor word `w` to the word currently being built.
 
+### `DIGIT`
+- dstack: `( w -- )`
+- Takes a processor word `w` and emits the character for a single digit based on the base.
+
 ### `DO`
 - Compile:
   - dstack: `( -- paddr )`
