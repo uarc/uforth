@@ -147,6 +147,15 @@ bra:FIND
 
 :CONTINUE_name $8 $"CONTINUE
 :CONTINUE
+# Compile mode
+callri:STATE bz:+
+    # Defer `continue` with a tail call optimization.
+    imm8:0x13 bra:DEFERO
+# Run (or other) mode
++
+    # TODO: Add an error message.
+    bra:QUIT
+++
 
 :COPY:_name $5 $"COPY:
 :COPY:
@@ -746,7 +755,8 @@ callri:STATE bz:+
     imm8:0x11 bra:DEFERO
 # Run (or other) mode
 +
-    break
+    # TODO: Add an error message.
+    bra:QUIT
 ++
 
 :LITERAL_name $7 $"LITERAL
