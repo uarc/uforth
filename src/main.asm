@@ -102,6 +102,13 @@ bra:FIND
 
 :>_name $1 $">
 :>
+bleq:+
+    imm8:1
+    return
++
+    imm8:0
+    return
+++
 
 :@_name $1 $"@
 :@
