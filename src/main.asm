@@ -129,6 +129,20 @@ bra:FIND
 
 :base_name $4 $"base
 :base
+# Compile mode
+callri:STATE bz:+
+    # Defer an imm16 instruction.
+    imm8:0x95 callri:DEFERO
+    # Defer the 16-bit immediate address of the variable and perform a tail call optimization.
+    imm16:$base_var bra:DEFERS
+# Run (or other) mode
++
+    # Add the variable address to the stack.
+    imm16:$base_var
+    return
+++
+
+:base_var $10
 
 :BL_name $2 $"BL
 :BL
