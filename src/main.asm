@@ -51,10 +51,13 @@ bra:FIND
 
 :+!_name $2 $"+!
 :+!
+rot1 copy1 reads add rot1 write
+return
 
 :,_name $1 $",
 :,
 callri:hered reads write callri:hered reads inc callri:hered write
+return
 
 :-_name $1 $"-
 :-
