@@ -940,7 +940,8 @@ callri:STATE bz:+
     callri:NUMBER imm8:0xC0 add bra:DEFERO
 # Run (or other) mode
 +
-    # TODO: This should display an error.
+    callri:NUMBER imm8:0xC0 add writepori:+++
+    nop +++ pfill:0,1
     return
 ++
 
