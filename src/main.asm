@@ -150,6 +150,20 @@ bra:FIND
 
 :COPY:_name $5 $"COPY:
 :COPY:
+# Compile mode
+callri:STATE bz:+
+    # Temporarily enter run mode.
+    callri:[
+    # Defer `rot#`.
+    callri:NUMBER imm8:0xE0 add callri:DEFERO
+    # Return to compile mode with tail call optimization.
+    bra:]
+# Run (or other) mode
++
+    callri:NUMBER imm8:0xC0 add writepori:+++
+    nop +++ pfill:0,1
+    return
+++
 
 :COUNT_name $5 $"COUNT
 :COUNT
@@ -983,7 +997,7 @@ callri:STATE bz:+
     callri:[
     # Defer `rot#`.
     callri:NUMBER imm8:0xC0 add callri:DEFERO
-    # Return to compile move with tail call optimization.
+    # Return to compile mode with tail call optimization.
     bra:]
 # Run (or other) mode
 +
