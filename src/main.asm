@@ -72,15 +72,47 @@ bra:FIND
 
 :0<_name $2 $"0<
 :0<
+imm8:0 bles:+
+    imm8:0
+    return
++
+    imm8:1
+    return
+++
 
 :0=_name $2 $"0=
 :0=
+brz:+
+    imm8:0
+    return
++
+    imm8:1
+    return
+++
 
 :1+_name $2 $"1+
 :1+
+# Compile mode
+callri:STATE bz:+
+    # Defer an `inc` with a tail call optimization.
+    imm8:0x0C bra:DEFERO
+# Run (or other) mode
++
+    inc
+    return
+++
 
 :1-_name $2 $"1-
 :1-
+# Compile mode
+callri:STATE bz:+
+    # Defer a `dec` with a tail call optimization.
+    imm8:0x0D bra:DEFERO
+# Run (or other) mode
++
+    dec
+    return
+++
 
 :2*_name $2 $"2*
 :2*
