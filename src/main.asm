@@ -57,6 +57,15 @@ bra:FIND
 
 :-_name $1 $"-
 :-
+# Compile mode
+callri:STATE bz:+
+    # Defer a `sub` with a tail call optimization.
+    imm8:0x59 bra:DEFERO
+# Run (or other) mode
++
+    sub
+    return
+++
 
 :._name $1 $".
 :.
