@@ -126,6 +126,15 @@ bra:FIND
 
 :AND_name $3 $"AND
 :AND
+# Compile mode
+callri:STATE bz:+
+    # Defer an `and` with a tail call optimization.
+    imm8:0x5F bra:DEFERO
+# Run (or other) mode
++
+    and
+    return
+++
 
 :base_name $4 $"base
 :base
