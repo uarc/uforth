@@ -144,6 +144,22 @@ bra:FIND
 
 :CONSTATNT_name $9 $"CONSTATNT
 :CONSTATNT
+callri:CREATE
+# Defer `imm32:val`.
+imm8:0x96 callri:DEFERO callri:DEFERW
+# TODO: Optimize this by exchanging `calli` with `callri`.
+# Defer `calli:DOCON` with a tail call optimization.
+imm8:0x1B callri:DEFERO imm32:.DOCON bra:DEFERW
+
+:DOCON
+# Compile mode
+callri:STATE bz:+
+    bra:LITERAL
+# Run (or other) mode
++
+    # It's already on the stack, so just return.
+    return
+++
 
 :CONTINUE_name $8 $"CONTINUE
 :CONTINUE
@@ -417,7 +433,7 @@ iloop:+
 # Set dc0 to the back stack.
 push0 callri:hereb reads set0
 # Get the end of the word.
-callri:BL imm8:32 callri:SCAN
+callri:BL imm8:64 callri:SCAN
 # Get the processing position, read the old address to conveyor, and write the next address to it.
 dup inc callri:pp dup read write
 # Duplicate the address, get the old address from the conveyor, and calculate the string length.
