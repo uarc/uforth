@@ -35,14 +35,17 @@ bra:FIND
 :(compile)_name $9 $"(compile)
 :(compile)
 callri:[
-# Get the next word string on the stack as addr n format.
-callri:pp imm8:0x20 copy1 reads callri:SCAN copy1 reads sub
+# Get the next word string on the stack as addr n format, but leave an extra ending address underneath on the stack.
+imm8:0x20 imm8:64 callri:SCAN dup callri:pp reads sub
 # Find the word with the name.
 callri:FIND
 callri:]
 # Check if the word was found at all.
 dup bz:+
-    # It was found, so check if it is immediate or not.
+    # It was found.
+    # Advance the pp after the word.
+    rot1 inc callri:pp write
+    # Check if it is immediate or not.
     bc:++
         # It is not immediate, so compile it into the current word.
         bra:COMPILE,
@@ -51,10 +54,29 @@ dup bz:+
         jmp
     +++
 +
-drop return
+ddrop
+# If it wasn't found, try parsing it as a NUMBER.
+callri:NUMBER
+# Compile the number literal into the program with a tail-call optimization.
+bra:LITERAL
 
 :(run)_name $5 $"(run)
 :(run)
+# Get the next word string on the stack as addr n format, but leave an extra ending address underneath on the stack.
+imm8:0x20 imm8:64 callri:SCAN dup callri:pp reads sub
+# Find the word with the name.
+callri:FIND
+# Check if the word was found at all.
+dup bz:+
+    # It was found.
+    # Advance the pp after the word.
+    rot1 inc callri:pp write
+    # Regardless of if it is immediate or not, run it with a tail-call optimization.
+    jmp
++
+ddrop
+# If it wasn't found, try parsing it as a NUMBER with a tail-call optimization.
+bra:NUMBER
 
 :*_name $1 $"*
 :*
