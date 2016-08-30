@@ -5,7 +5,13 @@
 :INIT
 # Select bus 0 for communication.
 imm8:0 seb
+# Set pp to be dumb_string.
+$dumb_string callri:pp write
+# Call INTERPRET.
+callri:INTERPRET
 bra:INIT
+
+:dumb_string $"1 $0x20 $"17 $0x20 $"DUP $0x20 $0x20
 
 #####
 ##### Dictionary
@@ -1611,5 +1617,7 @@ malign:0,2040
 ##### Backstack
 #####
 
+:(run)_xt $.(run) $$(run) $$(run)_name $0
+:(compile)_xt $.(compile) $$(compile) $$(compile)_name $0
 :'_xt $.' $$' $$'_name $0
 :!_xt $.! $$! $$!_name $1
