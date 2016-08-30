@@ -1617,6 +1617,9 @@ malign:0,2040
 ##### Backstack
 #####
 
+:,_xt $., $$, $$,_name $0
+:+!_xt $.+! $$+! $$+!_name $0
+:+_xt $.PLUS $$PLUS $$+_name $1
 :*/MOD_xt $.*/MOD $$*/MOD $$*/MOD_name $0
 :*/_xt $.*/ $$*/ $$*/_name $0
 :*_xt $.* $$* $$*_name $0
