@@ -349,9 +349,6 @@ callri:STATE bz:+
     return
 ++
 
-# Uses the same xt as `QUIT`.
-:ABORT_name $5 $"ABORT
-
 :ABORT"_name $6 $"ABORT"
 :ABORT"
 # Immedate word so append the semantics of ABORT" rather than performing it.
@@ -359,7 +356,7 @@ callri:." imm16:.QUIT bra:COMPILE,
 
 :ABS_name $3 $"ABS
 :ABS
-imm8:0 bles:+
+dup imm8:0 bles:+
     return
 +
     subi:0
@@ -1305,6 +1302,8 @@ callri:STATE bz:+
 
 :pp_var mfill:0,1
 
+# Uses the same xt as `QUIT`.
+:ABORT_name $5 $"ABORT
 :QUIT_name $4 $"QUIT
 :QUIT
 # Emit a newline before restarting.
@@ -1617,6 +1616,17 @@ malign:0,2040
 ##### Backstack
 #####
 
+:COMPILE,_xt $.COMPILE, $$COMPILE, $$COMPILE,_name $0
+:BS_xt $.BS $$BS $$BS_name $1
+:BODY_xt $.BODY $$BODY $$BODY_name $0
+:BL_xt $.BL $$BL $$BL_name $1
+:base_xt $.base $$base $$base_name $1
+:AND_xt $.AND $$AND $$AND_name $1
+:ALLOT_xt $.ALLOT $$ALLOT $$ALLOT_name $0
+:ACCEPT_xt $.ACCEPT $$ACCEPT $$ACCEPT_name $0
+:ABS_xt $.ABS $$ABS $$ABS_name $0
+:ABORT"_xt $.ABORT" $$ABORT" $$ABORT"_name $1
+:@_xt $.@ $$@ $$@_name $1
 :>=_xt $.>= $$>= $$>=_name $0
 :>_xt $.> $$> $$>_name $0
 :=_xt $.= $$= $$=_name $0
