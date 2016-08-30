@@ -110,11 +110,11 @@ dup imm8:0 bles:+
 
 :*/_name $2 $"*/
 :*/
-callri:* bra:/
+rot2 rot2 callri:* rot1 bra:/
 
 :*/MOD_name $5 $"*/MOD
 :*/MOD
-callri:* bra:/MOD
+rot2 rot2 callri:* rot1 bra:/MOD
 
 :+_name $1 $"+
 :PLUS
@@ -1617,6 +1617,7 @@ malign:0,2040
 ##### Backstack
 #####
 
+:*/MOD_xt $.*/MOD $$*/MOD $$*/MOD_name $0
 :*/_xt $.*/ $$*/ $$*/_name $0
 :*_xt $.* $$* $$*_name $0
 :(run)_xt $.(run) $$(run) $$(run)_name $0
