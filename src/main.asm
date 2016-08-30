@@ -1617,6 +1617,8 @@ malign:0,2040
 ##### Backstack
 #####
 
+:*/_xt $.*/ $$*/ $$*/_name $0
+:*_xt $.* $$* $$*_name $0
 :(run)_xt $.(run) $$(run) $$(run)_name $0
 :(compile)_xt $.(compile) $$(compile) $$(compile)_name $0
 :'_xt $.' $$' $$'_name $0
