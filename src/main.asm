@@ -152,7 +152,7 @@ callri:STATE bz:+
 
 :._name $1 $".
 :.
-imm8:0 bles:+
+dup imm8:0 bles:+
     bra:U.
 +
     # It was less than 0 so print a negative sign.
@@ -1617,6 +1617,8 @@ malign:0,2040
 ##### Backstack
 #####
 
+:._xt $.. $$. $$._name $0
+:-_xt $.MINUS $$MINUS $$-_name $1
 :,_xt $., $$, $$,_name $0
 :+!_xt $.+! $$+! $$+!_name $0
 :+_xt $.PLUS $$PLUS $$+_name $1
