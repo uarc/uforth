@@ -15,6 +15,7 @@ bra:INIT
 :!
 # Compile mode
 callri:STATE bz:+
+    # Defer `write`.
     imm8:0x68 bra:DEFERO
 # Run (or other) mode
 +
@@ -33,6 +34,24 @@ bra:FIND
 
 :(compile)_name $9 $"(compile)
 :(compile)
+callri:[
+# Get the next word string on the stack as addr n format.
+callri:pp imm8:0x20 copy1 reads callri:SCAN copy1 reads sub
+# Find the word with the name.
+callri:FIND
+callri:]
+# Check if the word was found at all.
+dup bz:+
+    # It was found, so check if it is immediate or not.
+    bc:++
+        # It is not immediate, so compile it into the current word.
+        bra:COMPILE,
+    ++
+        # It is immediate, so call it with tail call optimization (jump).
+        jmp
+    +++
++
+drop return
 
 :(run)_name $5 $"(run)
 :(run)
@@ -140,7 +159,7 @@ WORD_BITS loop:+
     # Shift remainder to left by 1.
     lsli:1
     # Circular shift left a copy of the numerator by i + 1.
-    copy3 i inc csl
+    copy3 i0 inc csl
     # Or the lowest bit into the remainder.
     andi:1 or
     # Check if the remainder is greater than or equal to the divisor.
@@ -148,7 +167,7 @@ WORD_BITS loop:+
         # It was greater or equal, so subtract it from the remainder.
         copy2 sub
         # Add a one at bit position i in the quotient.
-        rot1 imm0:1 i lsl or rot1
+        rot1 imm8:1 i0 lsl or rot1
     ++
 +
 # Get rid of the numerator and the divisor.
@@ -169,7 +188,7 @@ imm8:0 bles:+
 
 :0=_name $2 $"0=
 :0=
-brz:+
+bz:+
     imm8:0
     return
 +
