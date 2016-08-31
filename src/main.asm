@@ -480,7 +480,7 @@ callri:STATE bz:+
 callri:STATE bz:+
     # Temporarily enter run mode.
     callri:[
-    # Defer `rot#`.
+    # Defer `copy#`.
     callri:NUMBER imm8:0xE0 add callri:DEFERO
     # Return to compile mode with tail call optimization.
     bra:]
@@ -1616,6 +1616,19 @@ malign:0,2040
 ##### Backstack
 #####
 
+:DOES_xt $.DOES $$DOES $$DOES_name $1
+:DO_xt $.DO $$DO $$DO_name $1
+:DIGIT_xt $.DIGIT $$DIGIT $$DIGIT_name $0
+:DEFERW_xt $.DEFERW $$DEFERW $$DEFERW_name $0
+:DEFERS_xt $.DEFERS $$DEFERS $$DEFERS_name $0
+:DEFERO_xt $.DEFERO $$DEFERO $$DEFERO_name $0
+:DECIMAL_xt $.DECIMAL $$DECIMAL $$DECIMAL_name $0
+:CREATE_xt $.CREATE $$CREATE $$CREATE_name $0
+:CR_xt $.CR $$CR $$CR_name $1
+:COUNT_xt $.COUNT $$COUNT $$COUNT_name $0
+:COPY:_xt $.COPY: $$COPY: $$COPY:_name $1
+:CONTINUE_xt $.CONTINUE $$CONTINUE $$CONTINUE_name $1
+:CONSTANT_xt $.CONSTANT $$CONSTANT $$CONSTANT_name $0
 :COMPILE,_xt $.COMPILE, $$COMPILE, $$COMPILE,_name $0
 :BS_xt $.BS $$BS $$BS_name $1
 :BODY_xt $.BODY $$BODY $$BODY_name $0
