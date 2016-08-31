@@ -1616,6 +1616,22 @@ malign:0,2040
 ##### Backstack
 #####
 
+:hereb_xt $.hereb $$hereb $$hereb_name $1
+:herep_xt $.herep $$herep $$herep_name $1
+:hered_xt $.hered $$hered $$hered_name $1
+:HERE_xt $.HERE $$HERE $$HERE_name $0
+:FORGET_xt $.FORGET $$FORGET $$FORGET_name $0
+:FIND_xt $.FIND $$FIND $$FIND_name $0
+:FILL_xt $.FILL $$FILL $$FILL_name $0
+:FALSE_xt $.FALSE $$FALSE $$FALSE_name $1
+:EXIT_xt $.EXIT $$EXIT $$EXIT_name $1
+:EXECUTE_xt $.EXECUTE $$EXECUTE $$EXECUTE_name $1
+:EMIT_xt $.EMIT $$EMIT $$EMIT_name $1
+:ELSE_xt $.ELSE $$ELSE $$ELSE_name $1
+:DWORD_xt $.DWORD $$DWORD $$DWORD_name $0
+:DUP_xt $.DUP $$DUP $$DUP_name $1
+:DROP_xt $.DROP $$DROP $$DROP_name $1
+:DOES>_xt $.DOES> $$DOES> $$DOES>_name $1
 :DOES_xt $.DOES $$DOES $$DOES_name $1
 :DO_xt $.DO $$DO $$DO_name $1
 :DIGIT_xt $.DIGIT $$DIGIT $$DIGIT_name $0
