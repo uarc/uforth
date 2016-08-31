@@ -865,9 +865,6 @@ imm8:0x16 callri:DEFERO
 callri:herep reads
 imm8:0 bra:DEFERS
 
-:IF_name $2 $"IF
-# IF is in the same location as IFZ!, look further down for its tag
-
 :IF=_name $3 $"IF=
 :IF=
 # Defer a `bne`
@@ -984,6 +981,9 @@ imm8:0xAC callri:DEFERO
 callri:herep reads
 # Defer 16-bits to be replaced by the `ELSE` or `THEN`.
 imm8:0 bra:DEFERS
+
+# IF is in the same location as IFZ!.
+:IF_name $2 $"IF
 
 :IFZ!_name $4 $"IFZ!
 # This is also the tag for IF
@@ -1616,6 +1616,25 @@ malign:0,2040
 ##### Backstack
 #####
 
+:IFA!_xt $.IFA! $$IFA! $$IFA!_name $1
+:IFA_xt $.IFA $$IFA $$IFA_name $1
+:IF_xt $.IFZ! $$IFZ! $$IF_name $1
+:IFZ_xt $.IFZ $$IFZ $$IFZ_name $1
+:IFI!_xt $.IFI! $$IFI! $$IFI!_name $1
+:IFI_xt $.IFI $$IFI $$IFI_name $1
+:IFO!_xt $.IFO! $$IFO! $$IFO!_name $1
+:IFO_xt $.IFO $$IFO $$IFO_name $1
+:IFC!_xt $.IFC! $$IFC! $$IFC!_name $1
+:IFC_xt $.IFC $$IFC $$IFC_name $1
+:IF>=U_xt $.IF>=U $$IF>=U $$IF>=U_name $1
+:IF>U_xt $.IF>U $$IF>U $$IF>U_name $1
+:IF>=_xt $.IF>= $$IF>= $$IF>=_name $1
+:IF>_xt $.IF> $$IF> $$IF>_name $1
+:IF!=_xt $.IF!= $$IF!= $$IF!=_name $1
+:IF=_xt $.IF= $$IF= $$IF=_name $1
+:IDO_xt $.IDO $$IDO $$IDO_name $1
+:I_xt $.I $$I $$I_name $1
+:HEX_xt $.HEX $$HEX $$HEX_name $0
 :hereb_xt $.hereb $$hereb $$hereb_name $1
 :herep_xt $.herep $$herep $$herep_name $1
 :hered_xt $.hered $$hered $$hered_name $1
