@@ -1597,11 +1597,11 @@ return
 
 :[_name $1 $"[
 :[
-.(run) callri:shell_xt write
+imm16:.(run) imm16:$shell_xt_var write
 
 :]_name $1 $"]
 :]
-.(compile) callri:shell_xt write
+imm16:.(compile) imm16:$shell_xt_var write
 
 :dictionary_end
 
@@ -1616,6 +1616,10 @@ malign:0,2040
 ##### Backstack
 #####
 
+:]_xt $.] $$] $$]_name $0
+:[_xt $.[ $$[ $$[_name $1
+:XT>NAME_xt $.XT>NAME $$XT>NAME $$XT>NAME_name $0
+:XOR_xt $.XOR $$XOR $$XOR_name $1
 :WORDS_xt $.WORDS $$WORDS $$WORDS_name $0
 :WORD_xt $.WORD $$WORD $$WORD_name $0
 :VARIABLE_xt $.VARIABLE $$VARIABLE $$VARIABLE_name $0
