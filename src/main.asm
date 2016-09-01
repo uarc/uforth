@@ -1362,7 +1362,7 @@ callri:STATE bz:+
 
 :S"_name $2 $"S"
 :S"
-callri:BL callri:WORD bra:LITERAL
+callri:[ callri:BL callri:WORD callri:LITERAL bra:]
 
 :SCAN_name $4 $"SCAN
 :SCAN
@@ -1417,7 +1417,7 @@ return
 
 :STATE_name $5 $"STATE
 :STATE
-callri:shell_xt reads .(compile) bne:+
+imm16:$shell_xt_var reads .(compile) bne:+
     imm8:1 return
 +
     imm8:0 return
@@ -1616,6 +1616,32 @@ malign:0,2040
 ##### Backstack
 #####
 
+:WORDS_xt $.WORDS $$WORDS $$WORDS_name $0
+:WORD_xt $.WORD $$WORD $$WORD_name $0
+:VARIABLE_xt $.VARIABLE $$VARIABLE $$VARIABLE_name $0
+:UNLOOP_xt $.UNLOOP $$UNLOOP $$UNLOOP_name $1
+:U*_xt $.U* $$U* $$U*_name $0
+:U<_xt $.U< $$U< $$U<_name $0
+:U._xt $.U. $$U. $$U._name $0
+:TYPE_xt $.TYPE $$TYPE $$TYPE_name $0
+:TUCK_xt $.TUCK $$TUCK $$TUCK_name $1
+:TRUE_xt $.TRUE $$TRUE $$TRUE_name $1
+:THEN_xt $.THEN $$THEN $$THEN_name $1
+:STREQ_xt $.STREQ $$STREQ $$STREQ_name $0
+:STATE_xt $.STATE $$STATE $$STATE_name $0
+:SPACES_xt $.SPACES $$SPACES $$SPACES_name $0
+:SPACE_xt $.SPACE $$SPACE $$SPACE_name $1
+:shell_xt_xt $.shell_xt $$shell_xt $$shell_xt_name $1
+:SCAN_xt $.SCAN $$SCAN $$SCAN_name $0
+:S"_xt $.S" $$S" $$S"_name $1
+:RSHIFT_xt $.RSHIFT $$RSHIFT $$RSHIFT_name $1
+:ROT:_xt $.ROT: $$ROT: $$ROT:_name $1
+:ROT_xt $.ROT $$ROT $$ROT_name $1
+:REVEAL_xt $.REVEAL $$REVEAL $$REVEAL_name $0
+:RECURSE_xt $.RECURSE $$RECURSE $$RECURSE_name $1
+:QUIT_xt $.QUIT $$QUIT $$QUIT_name $0
+:ABORT_xt $.QUIT $$QUIT $$ABORT_name $0
+:pp_xt $.pp $$pp $$pp_name $1
 :POSTPONE_xt $.POSTPONE $$POSTPONE $$POSTPONE_name $0
 :pa_xt $.pa $$pa $$pa_name $1
 :OVER_xt $.OVER $$OVER $$OVER_name $1
@@ -1641,6 +1667,7 @@ malign:0,2040
 :IMMEDIATE_xt $.IMMEDIATE $$IMMEDIATE $$IMMEDIATE_name $0
 :IFA!_xt $.IFA! $$IFA! $$IFA!_name $1
 :IFA_xt $.IFA $$IFA $$IFA_name $1
+:IFZ!_xt $.IFZ! $$IFZ! $$IFZ!_name $1
 :IF_xt $.IFZ! $$IFZ! $$IF_name $1
 :IFZ_xt $.IFZ $$IFZ $$IFZ_name $1
 :IFI!_xt $.IFI! $$IFI! $$IFI!_name $1
