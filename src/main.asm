@@ -444,8 +444,8 @@ imm8:0x1F callri:DEFERO
 # Defer the immediate parameter to `callri` with a tail call optimization.
 bra:DEFERS
 
-:CONSTATNT_name $9 $"CONSTATNT
-:CONSTATNT
+:CONSTANT_name $8 $"CONSTANT
+:CONSTANT
 callri:CREATE
 # Defer `imm32:val`.
 imm8:0x96 callri:DEFERO callri:DEFERW
@@ -1616,6 +1616,29 @@ malign:0,2040
 ##### Backstack
 #####
 
+:POSTPONE_xt $.POSTPONE $$POSTPONE $$POSTPONE_name $0
+:pa_xt $.pa $$pa $$pa_name $1
+:OVER_xt $.OVER $$OVER $$OVER_name $1
+:OR_xt $.OR $$OR $$OR_name $1
+:NUMBER_xt $.NUMBER $$NUMBER $$NUMBER_name $0
+:NL_xt $.NL $$NL $$NL_name $1
+:NIP_xt $.NIP $$NIP $$NIP_name $1
+:NEGATE_xt $.NEGATE $$NEGATE $$NEGATE_name $1
+:MOVE_xt $.MOVE $$MOVE $$MOVE_name $0
+:MOD_xt $.MOD $$MOD $$MOD_name $0
+:MIN_xt $.MIN $$MIN $$MIN_name $0
+:MAX_xt $.MAX $$MAX $$MAX_name $0
+:LSHIFT_xt $.LSHIFT $$LSHIFT $$LSHIFT_name $1
+:LOOP_xt $.LOOP $$LOOP $$LOOP_name $1
+:LITERAL_xt $.LITERAL $$LITERAL $$LITERAL_name $0
+:LEAVE_xt $.LEAVE $$LEAVE $$LEAVE_name $1
+:L_xt $.L $$L $$L_name $1
+:KEY?_xt $.KEY? $$KEY? $$KEY?_name $0
+:KEY_xt $.KEY $$KEY $$KEY_name $0
+:K_xt $.K $$K $$K_name $1
+:J_xt $.J $$J $$J_name $1
+:INTERPRET_xt $.INTERPRET $$INTERPRET $$INTERPRET_name $0
+:IMMEDIATE_xt $.IMMEDIATE $$IMMEDIATE $$IMMEDIATE_name $0
 :IFA!_xt $.IFA! $$IFA! $$IFA!_name $1
 :IFA_xt $.IFA $$IFA $$IFA_name $1
 :IF_xt $.IFZ! $$IFZ! $$IF_name $1
