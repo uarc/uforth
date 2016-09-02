@@ -164,6 +164,8 @@ dup imm8:0 bles:+
 :."
 # Get the string into the data space and get the address.
 imm8:0x22 callri:WORD
+# Since the pp is moved after the quotation, its on the space, so move it forwards one more character.
+imm16:$pp_var dup reads inc rot1 write
 # Defer the loading of the address at runtime.
 callri:LITERAL
 # Defer `COUNT`.
