@@ -42,7 +42,8 @@ bra:FIND
 :(compile)
 callri:[
 # Get the next word string on the stack as addr n format, but leave an extra ending address underneath on the stack.
-imm8:0x20 imm8:64 callri:SCAN dup imm16:$pp_var reads sub imm16:$pp_var reads rot1
+# Perform the increment here so we don't interfere with the carry bit later.
+imm8:0x20 imm8:64 callri:SCAN dup imm16:$pp_var reads sub rot1 inc rot1 imm16:$pp_var reads rot1
 # Find the word with the name.
 callri:FIND
 callri:]
@@ -50,7 +51,7 @@ callri:]
 dup bz:+
     # It was found.
     # Advance the pp after the word.
-    rot1 inc imm16:$pp_var write
+    rot1 imm16:$pp_var write
     # Check if it is immediate or not.
     bc:++
         # It is not immediate, so compile it into the current word.
