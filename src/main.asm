@@ -6,7 +6,7 @@
 # Select bus 0 for communication.
 imm8:0 seb
 # Set pp to be dumb_string.
-$dumb_string callri:pp write
+$dumb_string imm16:$pp_var write
 # Call INTERPRET.
 callri:INTERPRET
 bra:INIT
@@ -32,9 +32,9 @@ callri:STATE bz:+
 :'_name $1 $"'
 :'
 # Get the string address and length on the stack.
-callri:pp reads dup callri:BL callri:DWORD
+imm16:$pp_var reads dup imm8:0x20 callri:DWORD
 # Update pp variable now that the word has been parsed to move it to the next word.
-dup inc copy2 add callri:pp write
+dup inc copy2 add imm16:$pp_var write
 # Call find with a tail-call optimization.
 bra:FIND
 
@@ -42,7 +42,7 @@ bra:FIND
 :(compile)
 callri:[
 # Get the next word string on the stack as addr n format, but leave an extra ending address underneath on the stack.
-imm8:0x20 imm8:64 callri:SCAN dup callri:pp reads sub
+imm8:0x20 imm8:64 callri:SCAN dup imm16:$pp_var reads sub
 # Find the word with the name.
 callri:FIND
 callri:]
@@ -50,7 +50,7 @@ callri:]
 dup bz:+
     # It was found.
     # Advance the pp after the word.
-    rot1 inc callri:pp write
+    rot1 inc imm16:$pp_var write
     # Check if it is immediate or not.
     bc:++
         # It is not immediate, so compile it into the current word.
@@ -69,14 +69,14 @@ bra:LITERAL
 :(run)_name $5 $"(run)
 :(run)
 # Get the next word string on the stack as addr n format, but leave an extra ending address underneath on the stack.
-imm8:0x20 imm8:64 callri:SCAN dup callri:pp reads sub callri:pp reads rot1
+imm8:0x20 imm8:64 callri:SCAN dup imm16:$pp_var reads sub imm16:$pp_var reads rot1
 # Find the word with the name.
 callri:FIND
 # Check if the word was found at all.
 dup bz:+
     # It was found.
     # Advance the pp after the word.
-    rot1 inc callri:pp write
+    rot1 inc imm16:$pp_var write
     # Regardless of if it is immediate or not, run it with a tail-call optimization.
     jmp
 +
@@ -135,7 +135,7 @@ return
 
 :,_name $1 $",
 :,
-callri:hered reads write callri:hered reads inc callri:hered write
+imm16:$hered_var reads write imm16:$hered_var reads inc imm16:$hered_var write
 return
 
 :-_name $1 $"-
@@ -374,7 +374,7 @@ return
 
 :ALLOT_name $5 $"ALLOT
 :ALLOT
-callri:hered reads add callri:hered write
+imm16:$hered_var reads add imm16:$hered_var write
 return
 
 :AND_name $3 $"AND
@@ -420,7 +420,7 @@ callri:STATE bz:+
 
 :BODY_name $4 $"BODY
 :BODY
-callri:hereb reads inc reads
+imm16:$hereb_var reads inc reads
 return
 
 :BS_name $2 $"BS
@@ -438,7 +438,7 @@ callri:STATE bz:+
 :COMPILE,_name $8 $"COMPILE,
 :COMPILE,
 # Compute the PC 16-bit relative offset between the execution token and herep.
-callri:herep reads sub
+imm16:$herep_var reads sub
 # Defer `callri`.
 imm8:0x1F callri:DEFERO
 # Defer the immediate parameter to `callri` with a tail call optimization.
@@ -510,26 +510,26 @@ callri:STATE bz:+
 
 :CREATE_name $6 $"CREATE
 :CREATE
-callri:hereb addi:-4
+imm16:$hereb_var addi:-4
 # Set the word's program address.
-callri:herep reads copy1 write
+imm16:$herep_var reads copy1 write
 # Copy the string to hered.
-callri:BL callri:WORD copy1 addi:2 write
+imm8:0x20 callri:WORD copy1 addi:2 write
 # Set the word's data space address.
-callri:hered reads copy1 addi:1 write
+imm16:$hered_var reads copy1 addi:1 write
 # Set the word's immediate to 0.
 imm8:0 copy1 addi:3 write
 return
 
 :DECIMAL_name $7 $"DECIMAL
 :DECIMAL
-imm8:10 callri:base write
+imm8:10 imm16:$base_var write
 return
 
 :DEFERO_name $6 $"DEFERO
 :DEFERO
 # Aquire the address of the program head pointer.
-callri:herep
+imm16:$herep_var
 # Copy the address, read from it, and store the short to program memory, leaving the program pointer on the stack.
 copy0 reads rot2 copy1 writepo
 # Advance the program pointer by 1 and write back the new head.
@@ -539,7 +539,7 @@ return
 :DEFERS_name $6 $"DEFERS
 :DEFERS
 # Aquire the address of the program head pointer.
-callri:herep
+imm16:$herep_var
 # Copy the address, read from it, and store the short to program memory, leaving the program pointer on the stack.
 copy0 reads rot2 copy1 writeps
 # Advance the program pointer by 2 (the amount of octets in a short) and write back the new head.
@@ -549,7 +549,7 @@ return
 :DEFERW_name $6 $"DEFERW
 :DEFERW
 # Aquire the address of the program head pointer.
-callri:herep
+imm16:$herep_var
 # Copy the address, read from it, and store the value to program memory, leaving the program pointer on the stack.
 copy0 reads rot2 copy1 writep
 # Advance the program pointer by 4 (the amount of octets in a processor word) and write back the new head.
@@ -574,30 +574,30 @@ dup imm8:10 bles:+
 :DO_name $2 $"DO
 :DO
 imm8:0xAA callri:DEFERO
-callri:herep reads
+imm16:$herep_var reads
 imm8:0 bra:DEFERS
 
 :DOES_name $4 $"DOES
 :DOES
-callri:herep reads addi:6 imm8:0x95 callri:DEFERO callri:DEFERS
+imm16:$herep_var reads addi:6 imm8:0x95 callri:DEFERO callri:DEFERS
 imm8:0x1D callri:DEFERO
-imm16:.DOIT callri:herep reads sub bra:DEFERS
+imm16:.DOIT imm16:$herep_var reads sub bra:DEFERS
 
 :DOIT
-callri:hereb reads addi:-4 write
+imm16:$hereb_var reads addi:-4 write
 return
 
 :DOES>_name $5 $"DOES>
 :DOES>
-callri:herep reads addi:6 imm8:0x95 callri:DEFERO callri:DEFERS
+imm16:$herep_var reads addi:6 imm8:0x95 callri:DEFERO callri:DEFERS
 imm8:0x1D callri:DEFERO
-imm16:.DODOES callri:herep reads sub bra:DEFERS
+imm16:.DODOES imm16:$herep_var reads sub bra:DEFERS
 
 :DODOES
 # Perfom the functionality of DOIT (which consumes the program address)
 callri:DOIT
 # Then also add some code to produce the data space pointer of the new word in the new word before starting it.
-callri:hereb reads addi:-3 reads bra:LITERAL
+imm16:$hereb_var reads addi:-3 reads bra:LITERAL
 
 :DROP_name $4 $"DROP
 :DROP
@@ -640,7 +640,7 @@ iloop:+
 # Defer a branch always.
 imm8:0x1D callri:DEFERO
 # Get the herep address.
-callri:herep reads
+imm16:$herep_var reads
 # Defer 16-bits to be replaced by the `THEN`.
 imm8:0 callri:DEFERS
 # Compute the branch offset.
@@ -710,7 +710,7 @@ return
 :FIND_name $4 $"FIND
 :FIND
 # Set dc0 to the back stack.
-push0 callri:hereb reads set0
+push0 imm16:$hereb_var reads set0
 # Place the string length in an immediate location in the loop.
 writepri:+++
 # Iterate through every dictionary entry.
@@ -745,11 +745,11 @@ iloop:+
 :FORGET_name $6 $"FORGET
 :FORGET
 # Set dc0 to the back stack.
-push0 callri:hereb reads set0
+push0 imm16:$hereb_var reads set0
 # Get the end of the word.
-callri:BL imm8:64 callri:SCAN
+imm8:0x20 imm8:64 callri:SCAN
 # Get the processing position, read the old address to conveyor, and write the next address to it.
-dup inc callri:pp dup read write
+dup inc imm16:$pp_var dup read write
 # Duplicate the address, get the old address from the conveyor, and calculate the string length.
 dup cv0 sub
 # Place the string length in an immediate location in the loop.
@@ -774,11 +774,11 @@ iloop:+
         # Found a match, so drop the address.
         drop
         # Retrieve the program address from the token and set herep.
-        rareadi0:0 callri:herep write
+        rareadi0:0 imm16:$herep_var write
         # Retrieve the string address and set hered to it.
-        rareadi0:2 callri:hered write
+        rareadi0:2 imm16:$hered_var write
         # Get the address, add 4 to it, and set hereb.
-        get0 addi:4 callri:hereb write
+        get0 addi:4 imm16:$hereb_var write
         # Restore state.
         pop0 discard return
     ++
@@ -788,7 +788,7 @@ iloop:+
 
 :HERE_name $4 $"HERE
 :HERE
-callri:hered reads
+imm16:$hered_var reads
 return
 
 :hered_name $5 $"hered
@@ -844,7 +844,7 @@ callri:STATE bz:+
 
 :HEX_name $3 $"HEX
 :HEX
-imm8:16 callri:base write
+imm8:16 imm16:$base_var write
 return
 
 :I_name $1 $"I
@@ -862,7 +862,7 @@ callri:STATE bz:+
 :IDO_name $3 $"IDO
 :IDO
 imm8:0x16 callri:DEFERO
-callri:herep reads
+imm16:$herep_var reads
 imm8:0 bra:DEFERS
 
 :IF=_name $3 $"IF=
@@ -870,7 +870,7 @@ imm8:0 bra:DEFERS
 # Defer a `bne`
 imm8:0x6D callri:DEFERO
 # Get the address for `ELSE` or `THEN` to replace.
-callri:herep reads
+imm16:$herep_var reads
 # Defer 16-bits to be replaced by the `ELSE` or `THEN`.
 imm8:0 bra:DEFERS
 
@@ -879,7 +879,7 @@ imm8:0 bra:DEFERS
 # Defer a `beq`
 imm8:0x6C callri:DEFERO
 # Get the address for `ELSE` or `THEN` to replace.
-callri:herep reads
+imm16:$herep_var reads
 # Defer 16-bits to be replaced by the `ELSE` or `THEN`.
 imm8:0 bra:DEFERS
 
@@ -888,7 +888,7 @@ imm8:0 bra:DEFERS
 # Defer a `bleq`
 imm8:0x6F callri:DEFERO
 # Get the address for `ELSE` or `THEN` to replace.
-callri:herep reads
+imm16:$herep_var reads
 # Defer 16-bits to be replaced by the `ELSE` or `THEN`.
 imm8:0 bra:DEFERS
 
@@ -897,7 +897,7 @@ imm8:0 bra:DEFERS
 # Defer a `bles`
 imm8:0x6E callri:DEFERO
 # Get the address for `ELSE` or `THEN` to replace.
-callri:herep reads
+imm16:$herep_var reads
 # Defer 16-bits to be replaced by the `ELSE` or `THEN`.
 imm8:0 bra:DEFERS
 
@@ -906,7 +906,7 @@ imm8:0 bra:DEFERS
 # Defer a `blequ`
 imm8:0x71 callri:DEFERO
 # Get the address for `ELSE` or `THEN` to replace.
-callri:herep reads
+imm16:$herep_var reads
 # Defer 16-bits to be replaced by the `ELSE` or `THEN`.
 imm8:0 bra:DEFERS
 
@@ -915,7 +915,7 @@ imm8:0 bra:DEFERS
 # Defer a `blesu`
 imm8:0x70 callri:DEFERO
 # Get the address for `ELSE` or `THEN` to replace.
-callri:herep reads
+imm16:$herep_var reads
 # Defer 16-bits to be replaced by the `ELSE` or `THEN`.
 imm8:0 bra:DEFERS
 
@@ -924,7 +924,7 @@ imm8:0 bra:DEFERS
 # Defer a `bnc`
 imm8:0x8B callri:DEFERO
 # Get the address for `ELSE` or `THEN` to replace.
-callri:herep reads
+imm16:$herep_var reads
 # Defer 16-bits to be replaced by the `ELSE` or `THEN`.
 imm8:0 bra:DEFERS
 
@@ -933,7 +933,7 @@ imm8:0 bra:DEFERS
 # Defer a `bc`
 imm8:0x8A callri:DEFERO
 # Get the address for `ELSE` or `THEN` to replace.
-callri:herep reads
+imm16:$herep_var reads
 # Defer 16-bits to be replaced by the `ELSE` or `THEN`.
 imm8:0 bra:DEFERS
 
@@ -942,7 +942,7 @@ imm8:0 bra:DEFERS
 # Defer a `bno`
 imm8:0x8D callri:DEFERO
 # Get the address for `ELSE` or `THEN` to replace.
-callri:herep reads
+imm16:$herep_var reads
 # Defer 16-bits to be replaced by the `ELSE` or `THEN`.
 imm8:0 bra:DEFERS
 
@@ -951,7 +951,7 @@ imm8:0 bra:DEFERS
 # Defer a `bo`
 imm8:0x8C callri:DEFERO
 # Get the address for `ELSE` or `THEN` to replace.
-callri:herep reads
+imm16:$herep_var reads
 # Defer 16-bits to be replaced by the `ELSE` or `THEN`.
 imm8:0 bra:DEFERS
 
@@ -960,7 +960,7 @@ imm8:0 bra:DEFERS
 # Defer a `bni`
 imm8:0x8F callri:DEFERO
 # Get the address for `ELSE` or `THEN` to replace.
-callri:herep reads
+imm16:$herep_var reads
 # Defer 16-bits to be replaced by the `ELSE` or `THEN`.
 imm8:0 bra:DEFERS
 
@@ -969,7 +969,7 @@ imm8:0 bra:DEFERS
 # Defer a `bi`
 imm8:0x8E callri:DEFERO
 # Get the address for `ELSE` or `THEN` to replace.
-callri:herep reads
+imm16:$herep_var reads
 # Defer 16-bits to be replaced by the `ELSE` or `THEN`.
 imm8:0 bra:DEFERS
 
@@ -978,7 +978,7 @@ imm8:0 bra:DEFERS
 # Defer a `bnz`
 imm8:0xAC callri:DEFERO
 # Get the address for `ELSE` or `THEN` to replace.
-callri:herep reads
+imm16:$herep_var reads
 # Defer 16-bits to be replaced by the `ELSE` or `THEN`.
 imm8:0 bra:DEFERS
 
@@ -991,7 +991,7 @@ imm8:0 bra:DEFERS
 # Defer a `bz`
 imm8:0xAB callri:DEFERO
 # Get the address for `ELSE` or `THEN` to replace.
-callri:herep reads
+imm16:$herep_var reads
 # Defer 16-bits to be replaced by the `ELSE` or `THEN`.
 imm8:0 bra:DEFERS
 
@@ -1000,7 +1000,7 @@ imm8:0 bra:DEFERS
 # Defer a `bna`
 imm8:0xB9 callri:DEFERO
 # Get the address for `ELSE` or `THEN` to replace.
-callri:herep reads
+imm16:$herep_var reads
 # Defer 16-bits to be replaced by the `ELSE` or `THEN`.
 imm8:0 bra:DEFERS
 
@@ -1009,22 +1009,22 @@ imm8:0 bra:DEFERS
 # Defer a `ba`
 imm8:0xB8 callri:DEFERO
 # Get the address for `ELSE` or `THEN` to replace.
-callri:herep reads
+imm16:$herep_var reads
 # Defer 16-bits to be replaced by the `ELSE` or `THEN`.
 imm8:0 bra:DEFERS
 
 :IMMEDIATE_name $9 $"IMMEDIATE
 :IMMEDIATE
-imm8:1 callri:hereb reads addi:3 write
+imm8:1 imm16:$hereb_var reads addi:3 write
 return
 
 :INTERPRET_name $9 $"INTERPRET
 :INTERPRET
 iloop:+
-    callri:pp reads reads callri:BL bne:++
+    imm16:$pp_var reads reads imm8:0x20 bne:++
         discard return
     ++
-    callri:shell_xt reads call
+    imm16:$shell_xt_var reads call
 +
 
 :J_name $1 $"J
@@ -1185,7 +1185,7 @@ callri:STATE bz:+
 
 :NUMBER_name $6 $"NUMBER
 :NUMBER
-push0 callri:pp reads set0
+push0 imm16:$pp_var reads set0
 # Check for negative and put a `1` on the stack if there is a negative sign and `0` otherwise.
 read0:0 imm8:45 bne:+
     imm8:1
@@ -1198,9 +1198,9 @@ read0:0 imm8:45 bne:+
 # Add accumulator to stack.
 imm8:0
 iloop:+
-    read0:1 dup callri:BL bne:++
+    read0:1 dup imm8:0x20 bne:++
         # Set the new pp after the number.
-        get0 callri:pp write
+        get0 imm16:$pp_var write
         # Drop the space character.
         drop
         break
@@ -1208,21 +1208,21 @@ iloop:+
     dup imm8:48 bles:++
         imm8:57 copy1 bles:+++
             # This is in the range '0' - '9'.
-            addi:-48 rot1 callri:base reads callri:U* add
+            addi:-48 rot1 imm16:$base_var reads callri:U* add
             continue
         +++
     ++
     dup imm8:65 bles:++
         imm8:90 copy1 bles:+++
             # This is in the range 'A' - 'Z'.
-            addi:-65 rot1 callri:base reads callri:U* add
+            addi:-65 rot1 imm16:$base_var reads callri:U* add
             continue
         +++
     ++
     dup imm8:97 bles:++
         imm8:122 copy1 bles:+++
             # This is in the range 'a' - 'z'.
-            addi:-97 rot1 callri:base reads callri:U* add
+            addi:-97 rot1 imm16:$base_var reads callri:U* add
             continue
         +++
     ++
@@ -1308,16 +1308,16 @@ callri:STATE bz:+
 :QUIT_name $4 $"QUIT
 :QUIT
 # Emit a newline before restarting.
-callri:NL callri:EMIT
+imm8:0xA callri:EMIT
 imm8:0 dup reset
 
 :RECURSE_name $7 $"RECURSE
 :RECURSE
-callri:hereb reads addi:-4 reads bra:COMPILE,
+imm16:$hereb_var reads addi:-4 reads bra:COMPILE,
 
 :REVEAL_name $6 $"REVEAL
 :REVEAL
-callri:hereb dup reads addi:-4 rot1 write
+imm16:$hereb_var dup reads addi:-4 rot1 write
 return
 
 :ROT_name $3 $"ROT
@@ -1363,11 +1363,11 @@ callri:STATE bz:+
 
 :S"_name $2 $"S"
 :S"
-callri:[ callri:BL callri:WORD callri:LITERAL bra:]
+callri:[ imm8:0x20 callri:WORD callri:LITERAL bra:]
 
 :SCAN_name $4 $"SCAN
 :SCAN
-push0 callri:pp reads set0
+push0 imm16:$pp_var reads set0
 loop:+
     dup read0:1 bne:++
         drop
@@ -1440,7 +1440,7 @@ pop1 pop0 imm8:1 return
 :THEN_name $4 $"THEN
 :THEN
 # Get the herep address.
-callri:herep reads
+imm16:$herep_var reads
 # Compute the branch offset.
 copy1 sub addi:1 rot1 write
 # Nothing is left on the stack.
@@ -1482,7 +1482,7 @@ return
 :U._name $2 $"U.
 :U.
 # Get the digit to display and check if we need to call this again.
-callri:base reads callri:/MOD dup bz:+
+imm16:$base_var reads callri:/MOD dup bz:+
     # Since the quotient is not 0, call this again to display the more significant digits.
     callri:U.
     # Print this digit with a tail call optimization.
@@ -1535,37 +1535,37 @@ callri:CREATE
 imm8:1 callri:ALLOT
 # TODO: Add a DOVAR to inline the address for efficiency.
 # Defer the instructions to produce the address.
-imm8:0x96 callri:DEFERO callri:hered reads callri:DEFERW
+imm8:0x96 callri:DEFERO imm16:$hered_var reads callri:DEFERW
 # Reveal the word in the dictionary with a tail call optimization.
 bra:REVEAL
 
 :WORD_name $4 $"WORD
 :WORD
 # Word cap at 64 (change this number to alter this)
-callri:BL imm8:64 callri:SCAN dup bnz:+
+imm8:0x20 imm8:64 callri:SCAN dup bnz:+
     # In this case, the delimiter was not found.
     # TODO: Print errors.
     bra:QUIT
 +
 # Find the length of the string.
-callri:pp reads sub
+imm16:$pp_var reads sub
 # Write the length of the string to data space.
-dup callri:hered reads write
+dup imm16:$hered_var reads write
 # Get the string source address again.
-callri:pp reads
+imm16:$pp_var reads
 # The string is now in `n addr` format, so copy it to (hered + 1) after the number word.
-callri:hered reads inc callri:MOVE
+imm16:$hered_var reads inc callri:MOVE
 # Get original hered and also increment hered to the new length, including an increment for the number.
-callri:hered reads dup rot2 add inc
+imm16:$hered_var reads dup rot2 add inc
 # Write back the incremented hered.
-callri:hered write
+imm16:$hered_var write
 # The old hered is left on the stack and is the location the string begins.
 return
 
 :WORDS_name $5 $"WORDS
 :WORDS
 # Set dc0 to the back stack.
-push0 callri:hereb reads set0
+push0 imm16:$hereb_var reads set0
 # Iterate through every dictionary entry.
 iloop:+
     # Check if we reached the end of the dictionary
@@ -1576,7 +1576,7 @@ iloop:+
     # Read the entry with an offset of 2 to get the name address and display it.
     rareadi0:2 callri:COUNT callri:TYPE
     # Send a space to the terminal.
-    callri:BL intsend
+    imm8:0x20 intsend
 +
 
 :XOR_name $3 $"XOR
