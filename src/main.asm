@@ -1142,7 +1142,7 @@ return
 push0 push1
 set1 set0
 loop:+
-    read0:1 writepst0:1
+    read0:1 writepst1:1
 +
 pop1 pop0
 return
