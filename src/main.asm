@@ -42,7 +42,7 @@ bra:FIND
 :(compile)
 callri:[
 # Get the next word string on the stack as addr n format, but leave an extra ending address underneath on the stack.
-imm8:0x20 imm8:64 callri:SCAN dup imm16:$pp_var reads sub
+imm8:0x20 imm8:64 callri:SCAN dup imm16:$pp_var reads sub imm16:$pp_var reads rot1
 # Find the word with the name.
 callri:FIND
 callri:]
