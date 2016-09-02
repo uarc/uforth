@@ -1553,6 +1553,8 @@ imm16:$pp_var reads sub
 dup dup imm16:$hered_var reads write
 # Get the string source address again.
 imm16:$pp_var reads
+# Update the processing position now that we know the length of the string and have the beginning address already.
+dup copy2 add inc imm16:$pp_var write
 # The string is now in `n addr` format, so copy it to (hered + 1) after the number word.
 imm16:$hered_var reads inc callri:MOVE
 # Get original hered and also increment hered to the new length, including an increment for the number.
