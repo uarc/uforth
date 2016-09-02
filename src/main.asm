@@ -1550,7 +1550,7 @@ imm8:0x20 imm8:64 callri:SCAN dup bnz:+
 # Find the length of the string.
 imm16:$pp_var reads sub
 # Write the length of the string to data space.
-dup imm16:$hered_var reads write
+dup dup imm16:$hered_var reads write
 # Get the string source address again.
 imm16:$pp_var reads
 # The string is now in `n addr` format, so copy it to (hered + 1) after the number word.
