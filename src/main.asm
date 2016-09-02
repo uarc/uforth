@@ -1599,10 +1599,12 @@ return
 :[_name $1 $"[
 :[
 imm16:.(run) imm16:$shell_xt_var write
+return
 
 :]_name $1 $"]
 :]
 imm16:.(compile) imm16:$shell_xt_var write
+return
 
 :dictionary_end
 
