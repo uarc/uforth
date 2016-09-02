@@ -11,7 +11,7 @@ $dumb_string callri:pp write
 callri:INTERPRET
 bra:INIT
 
-:dumb_string $"1 $0x20 $"17 $0x20 $"DUP $0x20 $0x20
+:dumb_string $"72 $0x20 $"EMIT $0x20 $"73 $0x20 $"EMIT $0x20 $"10 $0x20 $"EMIT $0x20 $0x20
 
 #####
 ##### Dictionary
@@ -69,7 +69,7 @@ bra:LITERAL
 :(run)_name $5 $"(run)
 :(run)
 # Get the next word string on the stack as addr n format, but leave an extra ending address underneath on the stack.
-imm8:0x20 imm8:64 callri:SCAN dup callri:pp reads sub
+imm8:0x20 imm8:64 callri:SCAN dup callri:pp reads sub callri:pp reads rot1
 # Find the word with the name.
 callri:FIND
 # Check if the word was found at all.
@@ -1022,11 +1022,10 @@ return
 :INTERPRET
 iloop:+
     callri:pp reads reads callri:BL bne:++
-        break
+        discard return
     ++
     callri:shell_xt reads call
 +
-return
 
 :J_name $1 $"J
 :J
@@ -1202,33 +1201,35 @@ iloop:+
     read0:1 dup callri:BL bne:++
         # Set the new pp after the number.
         get0 callri:pp write
+        # Drop the space character.
+        drop
         break
     ++
-    imm8:47 copy1 bles:++
-        dup imm8:57 bleq:+++
+    dup imm8:48 bles:++
+        imm8:57 copy1 bles:+++
             # This is in the range '0' - '9'.
-            addi:-48 rot1 callri:base reads callri:*
+            addi:-48 rot1 callri:base reads callri:U* add
             continue
         +++
     ++
-    imm8:64 copy1 bles:++
-        dup imm8:90 bleq:+++
+    dup imm8:65 bles:++
+        imm8:90 copy1 bles:+++
             # This is in the range 'A' - 'Z'.
-            addi:-65 rot1 callri:base reads callri:*
+            addi:-65 rot1 callri:base reads callri:U* add
             continue
         +++
     ++
-    imm8:96 copy1 bles:++
-        dup imm8:122 bleq:+++
+    dup imm8:97 bles:++
+        imm8:122 copy1 bles:+++
             # This is in the range 'a' - 'z'.
-            addi:-97 rot1 callri:base reads callri:*
+            addi:-97 rot1 callri:base reads callri:U* add
             continue
         +++
     ++
     # TODO: Print an error message.
     bra:QUIT
 +
-rot1 bnz:+
+rot1 bz:+
     # Negate number due to negative sign.
     subi:0
 +
@@ -1605,10 +1606,11 @@ imm16:.(compile) imm16:$shell_xt_var write
 
 :dictionary_end
 
-# Align the segments
-palign:0xC0,2048
+# Program memory aligned to 64k.
+palign:0xC0,0x10000
+# Main memory aligned to 64kW.
 # Data must be aligned such that the backstack consumes the rest of memory.
-malign:0,2040
+malign:0,64972
 
 :backstack_head
 
