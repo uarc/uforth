@@ -11,7 +11,7 @@ $dumb_string imm16:$pp_var write
 callri:INTERPRET
 bra:INIT
 
-:dumb_string $"72 $0x20 $"EMIT $0x20 $"73 $0x20 $"EMIT $0x20 $"10 $0x20 $"EMIT $0x20 $0x20
+:dumb_string $": $0x20 $"NEWWORD $0x20 $"." $0x20 $"HELLO" $0x20 $"; $0x20 $"NEWWORD $0x20 $"10 $0x20 $"EMIT $0x20 $0x20
 
 #####
 ##### Dictionary
@@ -167,7 +167,7 @@ imm8:0x22 callri:WORD
 callri:LITERAL
 # Defer `COUNT`.
 imm16:.COUNT callri:COMPILE,
-# Defer `TYPE`.
+# Defer `TYPE` with tail-call optimization.
 imm16:.TYPE bra:COMPILE,
 
 :/_name $1 $"/
@@ -510,7 +510,7 @@ callri:STATE bz:+
 
 :CREATE_name $6 $"CREATE
 :CREATE
-imm16:$hereb_var addi:-4
+imm16:$hereb_var reads addi:-4
 # Set the word's program address.
 imm16:$herep_var reads copy1 write
 # Copy the string to hered.
@@ -518,7 +518,7 @@ imm8:0x20 callri:WORD copy1 addi:2 write
 # Set the word's data space address.
 imm16:$hered_var reads copy1 addi:1 write
 # Set the word's immediate to 0.
-imm8:0 copy1 addi:3 write
+imm8:0 rot1 addi:3 write
 return
 
 :DECIMAL_name $7 $"DECIMAL
