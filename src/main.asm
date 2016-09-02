@@ -1542,7 +1542,7 @@ bra:REVEAL
 :WORD_name $4 $"WORD
 :WORD
 # Word cap at 64 (change this number to alter this)
-imm8:0x20 imm8:64 callri:SCAN dup bnz:+
+imm8:64 callri:SCAN dup bnz:+
     # In this case, the delimiter was not found.
     # TODO: Print errors.
     bra:QUIT
