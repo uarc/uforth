@@ -11,7 +11,7 @@ $dumb_string imm16:$pp_var write
 callri:INTERPRET
 bra:INIT
 
-:dumb_string $": $0x20 $"NEWWORD $0x20 $"." $0x20 $"HELLO" $0x20 $"; $0x20 $"NEWWORD $0x20 $"10 $0x20 $"EMIT $0x20 $0x20
+:dumb_string $": $0x20 $"NEWWORD $0x20 $"5 $0x20 $"6 $0x20 $"+ $0x20 $"; $0x20 $"NEWWORD $0x20 $". $0x20 $"10 $0x20 $"EMIT $0x20 $0x20
 
 #####
 ##### Dictionary
@@ -194,11 +194,11 @@ WORD_BITS loop:+
     # Or the lowest bit into the remainder.
     andi:1 or
     # Check if the remainder is greater than or equal to the divisor.
-    copy2 bles:++
+    copy0 copy3 bles:++
         # It was greater or equal, so subtract it from the remainder.
         copy2 sub
-        # Add a one at bit position i in the quotient.
-        rot1 imm8:1 i0 lsl or rot1
+        # Add a one at bit position (31 - i) in the quotient.
+        rot1 imm8:1 i0 inc csr or rot1
     ++
 +
 # Get rid of the numerator and the divisor.
