@@ -5,13 +5,46 @@
 :INIT
 # Select bus 0 for communication.
 imm8:0 seb
-# Set pp to be dumb_string.
-$dumb_string imm16:$pp_var write
-# Call INTERPRET.
+# Begin infinite user input + interpret loop.
+-
+# Set the processing position to the processing area address.
+imm16:$pa_var reads imm16:$pp_var write
+# Get characters from the user.
+iloop:+
+    intrecv
+    # Check if it was a backspace.
+    dup imm8:8 bne:++
+        # It was a backspace, but check if we have any characters at all before moving back.
+        imm16:$pa_var reads imm16:$pp_var reads beq:+++
+            # We got a backspace and we have characters to undo.
+            # Decrement the processing position.
+            imm16:$pp_var reads dec imm16:$pp_var write
+            # Send the backspace character to the terminal.
+            intsend
+            continue
+        +++
+            # We got a backspace, but there are no characters in the input buffer, so do nothing.
+            drop continue
+    ++
+    # Check if it was a carriage return (enter key).
+    dup imm8:13 bne:++
+        # It was, so insert two spaces in the pad for internal reasons.
+        imm16:$pp_var reads
+        imm8:0x20 copy1 write inc
+        imm8:0x20 copy1 write inc
+        imm16:$pp_var write
+        # Print out a newline character to the terminal.
+        imm8:10 intsend
+        # Exit the loop to interpret.
+        drop break
+    ++
+    # Any other key needs to be added to the input buffer.
+    imm16:$pp_var reads dup inc imm16:$pp_var write write
++
+# Set the pp back to the processing area.
+imm16:$pa_var reads imm16:$pp_var write
 callri:INTERPRET
-bra:INIT
-
-:dumb_string $": $0x20 $"NEWWORD $0x20 $"5 $0x20 $"6 $0x20 $"+ $0x20 $"; $0x20 $"NEWWORD $0x20 $". $0x20 $"10 $0x20 $"EMIT $0x20 $0x20
+bra:-
 
 #####
 ##### Dictionary
