@@ -38,6 +38,8 @@ iloop:+
         # Exit the loop to interpret.
         drop break
     ++
+    # Print the key.
+    dup intsend
     # Any other key needs to be added to the input buffer.
     imm16:$pp_var reads dup inc imm16:$pp_var write write
 +
