@@ -11,7 +11,7 @@ imm8:0 seb
 imm16:$pa_var reads imm16:$pp_var write
 # Get characters from the user.
 iloop:+
-    intrecv
+    intrecv cv1
     # Check if it was a backspace.
     dup imm8:8 bne:++
         # It was a backspace, but check if we have any characters at all before moving back.
