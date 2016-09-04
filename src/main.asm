@@ -534,15 +534,8 @@ return
 
 :CR_name $2 $"CR
 :CR
-# Compile mode
-callri:STATE bz:+
-    # Defer imm8:0xD with a tail call optimization.
-    imm16:0x0D94 bra:DEFERS
-# Run (or other) mode
-+
-    imm8:0xD
-    return
-++
+imm8:10 intsend
+return
 
 :CREATE_name $6 $"CREATE
 :CREATE
@@ -1755,7 +1748,7 @@ malign:0,64972
 :DEFERO_xt $.DEFERO $$DEFERO $$DEFERO_name $0
 :DECIMAL_xt $.DECIMAL $$DECIMAL $$DECIMAL_name $0
 :CREATE_xt $.CREATE $$CREATE $$CREATE_name $0
-:CR_xt $.CR $$CR $$CR_name $1
+:CR_xt $.CR $$CR $$CR_name $0
 :COUNT_xt $.COUNT $$COUNT $$COUNT_name $0
 :COPY:_xt $.COPY: $$COPY: $$COPY:_name $1
 :CONTINUE_xt $.CONTINUE $$CONTINUE $$CONTINUE_name $1
